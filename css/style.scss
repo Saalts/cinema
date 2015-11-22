@@ -123,14 +123,12 @@ $logo-zoom: 1.1;
 	background: white;
 	border-radius: 5px;
 	padding: 5px;
-	margin: $logo-margin $logo-margin/2;
+	margin: $logo-margin;
 	box-shadow: 5px 5px 20px black;
 
 	&:hover {
 		transform: scale($logo-zoom, $logo-zoom);
 		-webkit-transform: scale($logo-zoom, $logo-zoom);
-
-		margin: $logo-margin $logo-margin*2;
 	}
 
 	&:active {
