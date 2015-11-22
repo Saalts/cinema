@@ -37,7 +37,7 @@ hook.Add( "InitPostEntity", "CheckMapSupport", function()
 
 		control.Add( KEY_F1, function( enabled, held )
 			if enabled and !held then
-				gui.OpenURL( "http://pixeltailgames.com/cinema/help.php" )
+				gui.OpenURL( GetConVarString( "cinema_help_url" ) )
 				warning.Clear()
 			end
 		end )

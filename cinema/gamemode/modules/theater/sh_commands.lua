@@ -1,4 +1,6 @@
 CreateConVar( "cinema_url", "http://pixeltailgames.github.io/cinema/", FCVAR_REPLICATED, "Cinema url to load on theater screens." )
+CreateConVar( "cinema_request_url", "http://cinema.pixeltailgames.com/search.html", FCVAR_REPLICATED, "Cinema url to load in request window by default." )
+CreateConVar( "cinema_help_url", "http://pixeltailgames.com/cinema/help.php", FCVAR_REPLICATED, "Url to load when f1 is pressed." )
 CreateConVar( "cinema_queue_mode", 1, { FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_REPLICATED }, "1 = Videos may be voted up or down\n2 = Videos are played in the order they're requested" )
 
 if CLIENT then

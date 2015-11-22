@@ -56,7 +56,7 @@ function PANEL:Init()
 	Msg("AWESOMIUM: Initialized instance for video request window\n")
 
 	self.Browser:SetAllowLua(true)
-	self.Browser:OpenURL( "http://cinema.pixeltailgames.com/search.html" )
+	self.Browser:OpenURL( GetConVarString( "cinema_request_url" ) )
 
 	self.Controls = vgui.Create( "TheaterHTMLControls", self.BrowserContainer )
 	self.Controls:SetHTML( self.Browser )
