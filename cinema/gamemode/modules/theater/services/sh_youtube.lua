@@ -152,13 +152,7 @@ function SERVICE:GetURLInfo( url )
 
 	-- http://www.youtube.com/watch?v=(videoId)
 	if url.query and url.query.v and string.len(url.query.v) > 0 then
-		-- http://www.youtube.com/watch?v=(videoId)&list=(list)
-		if url.query.list then
-			info.Playlist = true
-			info.Data = url.query.list
-		else
-			info.Data = url.query.v
-		end
+		info.Data = url.query.v
 
 	-- http://www.youtube.com/playlist?list=(list)
 	elseif url.query and url.query.list and string.len(url.query.list) > 0 then
