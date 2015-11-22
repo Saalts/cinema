@@ -103,7 +103,7 @@ vgui.Register( "VideoRequestFrame", PANEL, "EditablePanel" )
 
 local HISTORY = {}
 HISTORY.TitleHeight = 64
-HISTORY.VidHeight = 32 // 48
+HISTORY.VidHeight = 32 -- 48
 
 function HISTORY:Init()
 	self:SetSize( 256, 512 )
@@ -163,15 +163,15 @@ end
 local Background = Material( "theater/banner.png" )
 
 function HISTORY:Paint( w, h )
-	// Background
+	-- Background
 	surface.SetDrawColor( 26, 30, 38, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
 
-	// Title
+	-- Title
 	surface.SetDrawColor( 141, 38, 33, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self.Title:GetTall() )
 
-	// Title Background
+	-- Title Background
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, -1, 512, self.Title:GetTall() + 1 )

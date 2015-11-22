@@ -1,9 +1,11 @@
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PreVideoQueued
 	Desc: Called prior to a video being queued. Return false in a hook
 		to prevent the requested video from being queued. If you'd like
 		to filter videos, do so with this hook.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PreVideoQueued( Video, Theater )
 	local ply = Video:GetOwner()
 
@@ -30,40 +32,48 @@ function GM:PreVideoQueued( Video, Theater )
 	return true
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostVideoQueued
 	Desc: Called after a video has been queued.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostVideoQueued( Video, Theater )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PrePlayVideo
 	Desc: Called prior to a video being played. Return false in a hook
 		to prevent the video from playing. However, it will still remain
 		in the video queue. If a video is suspended, the theater will not
 		continue to play any videos unless otherwise set to.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PrePlayVideo( Video, Theater )
 	return true
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostPlayVideo
 	Desc: Called after a video has been set to play.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostPlayVideo( Video, Theater )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PrePlayerEnterTheater
 	Desc: Called right before the player has joined the theater. Returning
 		false here will prevent the player from being added to the theater.
 		If you're going to be implementing VIP, use this hook and move the
 		player elsewhere.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PrePlayerEnterTheater( ply, Theater )
-/*
+--[[
 	Example VIP Implementation:
 
 	if Theater:IsPrivileged() and !ply:IsVIP() then
@@ -76,37 +86,45 @@ function GM:PrePlayerEnterTheater( ply, Theater )
 		return false
 
 	end
-*/
+]]
 
 	return true
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostPlayerEnterTheater
 	Desc: Called after the playing has entered a theater.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostPlayerEnterTheater( ply, Theater )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PrePlayerExitTheater
 	Desc: Called before the player leaves a theater.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PrePlayerExitTheater( ply, Theater )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostPlayerExitTheater
 	Desc: Called after the player leaves a theater.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostPlayerExitTheater( ply, Theater )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PlayerChangeTheater
 	Desc: Called when the player changes location. Determines if the
 		player has entered or exited a theater.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 local function PlayerChangeTheater( ply, loc, old )
 	local Theater = theater.GetByLocation( loc )
 	local OldTheater = theater.GetByLocation( old )
@@ -141,17 +159,21 @@ local function PlayerChangeTheater( ply, loc, old )
 end
 hook.Add( "PlayerChangeLocation", "TheaterInit", PlayerChangeTheater )
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PreVoteSkipAccept
 	Desc: Called before a voteskip is added.
 		Return false to stop the skip from being added.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PreVoteSkipAccept (ply, Theater)
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostVoteSkipAccept
 	Desc: Called after a voteskip is added.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostVoteSkipAccept (ply, Theater)
 end

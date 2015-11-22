@@ -98,7 +98,7 @@ function DrawVideoInfo( w, h, scale )
 	-- TODO: Animate things
 	-- local fade = math.Clamp((lastInfoView - CurTime()) / 2, 0, 1) * 255
 
-	/* Top Info Background */
+	-- Top Info Background
 	surface.SetDrawColor(0,0,0,255)
 	surface.SetTexture(gradientDown)
 	surface.DrawTexturedRect(0, 0, w, h)

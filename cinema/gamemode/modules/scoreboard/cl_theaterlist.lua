@@ -18,11 +18,11 @@ end
 local Background = Material( "theater/nowshowing256.png" )
 
 function THEATERLIST:Paint( w, h )
-	//Render the background
+	-- Render the background
 	surface.SetDrawColor( 123, 32, 29, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
 
-	// Title Background
+	-- Title Background
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, 0, self:GetWide(), 680 )

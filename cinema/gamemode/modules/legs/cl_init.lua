@@ -1,4 +1,4 @@
-/*----------------------------------------------------------------------
+--[[----------------------------------------------------------------------
 	2.4 Changelog
 	- Removed arm for melee holdtype, it just did not look good in many cases, mainly because they don't animate while attacking
 	- Made legs move forward as you look up, looks as if you are bending over to look down or something. It's definitly an improvement.
@@ -11,11 +11,11 @@
 		* GetLocalPlayersLegs() -- Will return the leg entity if visible, if not visible it returns local player
 	- Fixed legs drawing while spectating another entity ( Example: Catdaemon's shuttle )
 	- Fixed certain models showing as errors
-*/----------------------------------------------------------------------
+----------------------------------------------------------------------
 
-/*----------------------------------------------------------------------
+----------------------------------------------------------------------
 	Modified for Elevator: Source
-*/----------------------------------------------------------------------
+----------------------------------------------------------------------]]
 
 local Legs = {}
 Legs.LegEnt = nil
@@ -53,8 +53,8 @@ function GetPlayerLegs( ply )
 end
 
 Legs.EnabledVar = CreateConVar( "cl_legs", "1", { FCVAR_ARCHIVE, }, "Enable/Disable the rendering of the legs" )
-//Legs.VehicleDrawVar = CreateConVar( "cl_legs_vehicle", "0", { FCVAR_ARCHIVE, }, "Enable/Disable the rendering of the legs in a vehicle" )
-//Legs.LeanMode = CreateConVar( "cl_legs_leanmode", "0", { FCVAR_ARCHIVE, }, "Enable/Disable the adjusting of the legs forward/backwards position determined by eye pitch" )
+-- Legs.VehicleDrawVar = CreateConVar( "cl_legs_vehicle", "0", { FCVAR_ARCHIVE, }, "Enable/Disable the rendering of the legs in a vehicle" )
+-- Legs.LeanMode = CreateConVar( "cl_legs_leanmode", "0", { FCVAR_ARCHIVE, }, "Enable/Disable the adjusting of the legs forward/backwards position determined by eye pitch" )
 
 function Legs:SetUp() -- Creates our legs
 
@@ -62,7 +62,7 @@ function Legs:SetUp() -- Creates our legs
 	self.LegEnt:SetNoDraw( true ) -- We render the model differently
 	self.LegEnt.LastTick = 0
 
-	// Set player properties
+	-- Set player properties
 	LocalPlayer():SetProperties( self.LegEnt )
 
 end

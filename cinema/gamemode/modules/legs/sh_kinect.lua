@@ -2,7 +2,7 @@ local cinema_thirdpersondist = CreateClientConVar("cinema_thirdpersondistance", 
 
 if SERVER then
 	util.AddNetworkString("cinema_querykinect")
-else //CLIENT
+else -- CLIENT
 	concommand.Add("cinema_startkinect", function(ply, cmd, args )
 		local available = motionsensor && motionsensor.IsAvailable()
 		if !available then
@@ -49,7 +49,7 @@ net.Receive("cinema_querykinect", function(length, ply)
 		ply.controller:SetOwner( ply )
 
 
-		ply:SetDTBool( 3, true ) //set the last dtvar so if we add more and no one found this yet things wont break
+		ply:SetDTBool( 3, true ) -- set the last dtvar so if we add more and no one found this yet things wont break
 		ply:SetDTEntity( 3, ply.rag )
 		ply:SetNoDraw( true )
 		ply.ViewSelfAng = ply:EyeAngles()

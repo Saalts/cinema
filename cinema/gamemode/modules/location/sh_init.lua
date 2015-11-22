@@ -3,9 +3,9 @@ module( "Location", package.seeall )
 Debug = false
 Maps = {}
 
-// register a set of locations for a map
+-- register a set of locations for a map
 function Add( strName, tblMap )
-	// build indexes
+	-- build indexes
 	local idx = 1
 	for k, v in pairs( tblMap ) do
 		v.Index = idx
@@ -24,7 +24,7 @@ function Add( strName, tblMap )
 	table.insert( Maps, mapTbl )
 end
 
-// returns a table of locations for the specified map, or the current map if nil
+-- returns a table of locations for the specified map, or the current map if nil
 function GetLocations( strMap )
 	if ( !strMap ) then
 		strMap = game.GetMap()
@@ -37,7 +37,7 @@ function GetLocations( strMap )
 	end
 end
 
-// returns the location string of the index
+-- returns the location string of the index
 function GetLocationNameByIndex( iIndex )
 	local locations = GetLocations()
 
@@ -52,8 +52,8 @@ function GetLocationNameByIndex( iIndex )
 	return "Unknown"
 end
 
-// find a location by index
-// indexes get networked
+-- find a location by index
+-- indexes get networked
 function GetLocationByIndex( iIndex, strMap )
 	local locations = GetLocations( strMap )
 	if !locations then return end
@@ -62,7 +62,7 @@ function GetLocationByIndex( iIndex, strMap )
 	end
 end
 
-// find a location by name
+-- find a location by name
 function GetLocationByName( strName, strMap )
 	local locations = GetLocations( strMap )
 	if !locations then return end
@@ -87,7 +87,7 @@ local function GetTeleportBy( func, nameOrIndex, strMap )
 			Sql.Log( "location", "Tried to get a teleport for a location \"" .. nameOrIndex .. "\" on map \"" .. strMap .. "\" without any registered teleports!" )
 		end
 
-		// we'll give them the center of the location for now
+		-- we'll give them the center of the location for now
 		return ( tblLoc.Max + tblLoc.Min ) / 2
 	end
 
@@ -102,7 +102,7 @@ function GetTeleportByIndex( iIndex, strMap )
 	return GetTeleportBy( GetLocationByIndex, iIndex, strMap )
 end
 
-// returns the index of the player's current location, or 0 if unknown
+-- returns the index of the player's current location, or 0 if unknown
 function Find( ply )
 	local tblLoc = GetLocations()
 

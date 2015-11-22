@@ -1,8 +1,8 @@
-/*
+--[[
 	The Cinema location system is built from old
 	GMod Tower code. Credit goes to Voided for
 	the beautiful debugging system.
-*/
+]]
 
 module( "Location", package.seeall )
 
@@ -11,16 +11,16 @@ DebugEnabled = CreateClientConVar( "cinema_debug_locations", "0", false, false )
 DebugLocStart = nil
 DebugLocEnd = nil
 
-// we use this so that the bottom of a box will be lower than the player's position
+-- we use this so that the bottom of a box will be lower than the player's position
 FootOffset = Vector( 0, 0, -5 )
 
-/*
+--[[
 	Location editing utilities
 
 	These two concommands are designed to simplify location creation.
 	Simply run cinema_loc_start, move to create a desired box, then run cinema_loc_end and grab the lua printed to the console.
 	This requires you to be an admin!
-*/
+]]
 
 concommand.Add( "cinema_loc_start", function( ply, cmd, args )
 	if !ply:IsAdmin() then return end
@@ -69,7 +69,7 @@ concommand.Add( "cinema_loc_vector", function ( ply, cmd, args )
 	MsgN( "The above position has been copied to your clipboard." )
 end )
 
-// location visualizer for debugging
+-- location visualizer for debugging
 hook.Add( "PostDrawTranslucentRenderables", "CinemaDebugLocations", function ()
 	if ( !DebugEnabled:GetBool() ) then return end
 

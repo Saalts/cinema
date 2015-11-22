@@ -4,7 +4,7 @@ surface.CreateFont( "ScoreboardVidVotes", { font = "Open Sans Condensed", size =
 
 local ADMIN = {}
 ADMIN.TitleHeight = 64
-ADMIN.VidHeight = 32 // 48
+ADMIN.VidHeight = 32 -- 48
 
 function ADMIN:Init()
 	local Theater = LocalPlayer():GetTheater()
@@ -83,7 +83,7 @@ function ADMIN:Init()
 end
 
 function ADMIN:Update()
-	local Theater = LocalPlayer():GetTheater() // get player's theater from their location
+	local Theater = LocalPlayer():GetTheater() -- get player's theater from their location
 	if !Theater then return end
 
 	-- Change title text
@@ -105,15 +105,15 @@ end
 local Background = Material( "theater/banner.png" )
 
 function ADMIN:Paint( w, h )
-	// Background
+	-- Background
 	surface.SetDrawColor( 26, 30, 38, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
 
-	// Title
+	-- Title
 	surface.SetDrawColor( 141, 38, 33, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self.Title:GetTall() )
 
-	// Title Background
+	-- Title Background
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, -1, 512, self.Title:GetTall() + 1 )

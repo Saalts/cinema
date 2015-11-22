@@ -60,9 +60,7 @@ function VIDEO:Thumbnail()
 	return self._VideoThumbnail
 end
 
-/*
-	Owner
-*/
+-- Owner
 function VIDEO:GetOwner()
 	return self._Owner
 end
@@ -88,9 +86,7 @@ if SERVER then
 		return self._RequestTime
 	end
 
-	/*
-		Votes
-	*/
+	-- Votes
 	function VIDEO:GetVotes()
 		return self._Votes
 	end

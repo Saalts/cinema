@@ -1,7 +1,7 @@
 Location.Add( "theater_nexmultiplex_1m", {
-	/*
+	--[[
 		Main Lobby
-	*/
+	]]
 	[ "Lobby" ] =
 	{
 		Min = Vector( -713.77624511719, -390.92556762695, -5.9866619110107 ),
@@ -14,9 +14,9 @@ Location.Add( "theater_nexmultiplex_1m", {
 		Max = Vector( 943.96875, -404.81100463867, 571.09442138672 ),
 	},
 
-	/*
+	--[[
 		Public Theaters
-	*/
+	]]
 	[ "Theater Hallway" ] =
 	{
 		Min = Vector( 960.60504150391, 453.3369140625, -7.6199698448181 ),
@@ -72,9 +72,9 @@ Location.Add( "theater_nexmultiplex_1m", {
 		}
 	},
 
-	/*
+	--[[
 		Private Theaters
-	*/
+	]]
 	[ "Private Theater Hallway" ] =
 	{
 		Min = Vector( -2149.923828125, 511.40008544922, -24.675968170166 ),
@@ -153,9 +153,9 @@ Location.Add( "theater_nexmultiplex_1m", {
 		}
 	},
 
-	/*
+	--[[
 		Pool Theater
-	*/
+	]]
 	[ "Pool" ] =
 	{
 		Min = Vector( -153.40953063965, 1790.8237304688, -70.618278503418 ),
@@ -170,9 +170,9 @@ Location.Add( "theater_nexmultiplex_1m", {
 	},
 
 
-	/*
+	--[[
 		Bathrooms
-	*/
+	]]
 	[ "Fecal Depository" ] =
 	{
 		Min = Vector( 1017.2495727539, 64.891738891602, -4.4785866737366 ),
@@ -185,9 +185,9 @@ Location.Add( "theater_nexmultiplex_1m", {
 		Max = Vector( 1351.2644042969, 1469.17578125, 114.08692169189 ),
 	},
 
-	/*
+	--[[
 		VIP Areas
-	*/
+	]]
 	[ "VIP Lounge" ] =
 	{
 		Min = Vector( 1430.3830566406, 309.80764770508, 372.66598510742 ),

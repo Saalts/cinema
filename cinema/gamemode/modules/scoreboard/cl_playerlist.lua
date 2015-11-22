@@ -46,15 +46,15 @@ end
 local Background = Material( "theater/banner.png" )
 
 function PLAYERLIST:Paint( w, h )
-	// Background
+	-- Background
 	surface.SetDrawColor( 26, 30, 38, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
 
-	// Title
+	-- Title
 	surface.SetDrawColor( 141, 38, 33, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self.Title:GetTall() )
 
-	// Title Background
+	-- Title Background
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, -1, self:GetWide(), self.Title:GetTall() + 1 )
@@ -256,7 +256,7 @@ function PLAYERPING:Paint( w, h )
 	local xpos = 40 - 10
 	local x = xpos
 
-	// BG
+	-- BG
 	surface.SetDrawColor( 255, 255, 255, 10 )
 
 	for _, h in pairs( self.Heights ) do
@@ -264,7 +264,7 @@ function PLAYERPING:Paint( w, h )
 		x = x + 4
 	end
 
-	// Lit/Main
+	-- Lit/Main
 	x = xpos
 	surface.SetDrawColor( 255, 255, 255, 255 )
 
@@ -289,7 +289,7 @@ function PLAYERPING:Paint( w, h )
 	local w, h = surface.GetTextSize( zeros )
 	surface.SetTextPos( self.Ping.x - w - 1, self.Ping.y )
 
-	//Msg( zeros, "\n" )
+	-- Msg( zeros, "\n" )
 
 	surface.DrawText( zeros )
 end

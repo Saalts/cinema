@@ -25,11 +25,11 @@ function ENT:Draw()
 	self:DrawModel()
 end
 
-//This usermessage is only sent to the player actually teleporting, so we should be good
-usermessage.Hook("theater_door_load", function( um ) 
+-- This usermessage is only sent to the player actually teleporting, so we should be good
+usermessage.Hook("theater_door_load", function( um )
 	local self = um:ReadEntity()
 
-	self.TimeToNext = CurTime() + self.DelayTime //Give a slight pause before fading out
+	self.TimeToNext = CurTime() + self.DelayTime -- Give a slight pause before fading out
 	self.Mode = THEATER_LOAD_FADEDELAY;
 	LocalPlayer().LoadingEntity = self;
 
@@ -45,7 +45,7 @@ hook.Add( "RenderScreenspaceEffects", "theater_render_loading", function()
 	if mode == THEATER_LOAD_FADEDELAY then
 		if CurTime() > ent.TimeToNext then
 			ent.Mode = THEATER_LOAD_FADINGOUT
-			ent.Alpha = 1 //make sure it's 1
+			ent.Alpha = 1 -- make sure it's 1
 		end
 	elseif mode == THEATER_LOAD_FADINGOUT then
 		ent.Alpha = ent.Alpha - ( FrameTime() * 1 ) / ent.FadeTime
@@ -59,7 +59,7 @@ hook.Add( "RenderScreenspaceEffects", "theater_render_loading", function()
 
 		if CurTime() > ent.TimeToNext then
 			ent.Mode = THEATER_LOAD_FADINGIN
-			ent.Alpha = 0 //make sure it's 0
+			ent.Alpha = 0 -- make sure it's 0
 		end
 	elseif mode == THEATER_LOAD_FADINGIN then
 		ent.Alpha = ent.Alpha + ( FrameTime() * 1 ) / ent.FadeTime

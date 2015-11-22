@@ -201,9 +201,9 @@ else
 		Theater:VoteQueuedVideo(ply, QueueId, true)
 	end)
 
-	/*
+	--[[
 		Admin/Developer Commands
-	*/
+	]]
 	local function TheaterPrivilegedCommand( name, Function )
 		if !Function then return end
 
@@ -265,9 +265,9 @@ else
 		Theater:Reset()
 	end )
 
-	/*
+	--[[
 		Parse URLs in the chat for video requests
-	*/
+	]]
 	hook.Add( "PlayerSay", "TheaterAutoAdd", function( ply, chat )
 		local Theater = ply:GetTheater()
 		if Theater then

@@ -1,5 +1,5 @@
-ENT.DoorOpen = Sound("doors/door1_move.wav") //just defaults
-ENT.DoorClose = Sound("doors/door_wood_close1.wav") //just defaults
+ENT.DoorOpen = Sound("doors/door1_move.wav") -- just defaults
+ENT.DoorClose = Sound("doors/door_wood_close1.wav") -- just defaults
 
 function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_NONE)
@@ -78,7 +78,7 @@ function ENT:StartLoading( ply )
 	timer.Simple( self.FadeTime + self.DelayTime, function()
 
 		if IsValid( ply ) then
-			//Teleport the player
+			-- Teleport the player
 			ply.Teleporting = false
 			ply:Freeze( false )
 
@@ -98,7 +98,7 @@ end
 
 function ENT:Think()
 	if self.ShouldTeleport && CurTime() > self.TeleportAt then
-		//shut the frickity front door
+		-- shut the frickity front door
 		local sequence = self:LookupSequence("idle")
 		self:SetSequence(sequence)
 

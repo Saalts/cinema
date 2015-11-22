@@ -13,7 +13,7 @@
 
 local PANEL = {}
 
-local b = 20 // Brightness change of hover or depress
+local b = 20 -- Brightness change of hover or depress
 
 PANEL.BackgroundColor = Color( 38, 41, 49 )
 PANEL.HoverColor = Color( 38 + b, 41 + b, 49 + b )

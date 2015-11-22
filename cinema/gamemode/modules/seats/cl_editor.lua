@@ -1,4 +1,4 @@
-/*
+--[[
 	This editor is horribly broken and old, be warned.
 
 	View:
@@ -11,12 +11,12 @@
 
 	Run 'cinema_chaireditor' to open
 
-	If you do end up using this for finding offsets, or for 
+	If you do end up using this for finding offsets, or for
 	fixing it, consider submitting a pull request to the Cinema
 	gamemode with the additions.
 
 	https://github.com/pixeltailgames/cinema
-*/
+]]
 
 -- Only change this if you're a developer!
 if true then return end
@@ -54,11 +54,13 @@ function Open()
 	MainPanel:SetSize( 1280, 800 )
 	MainPanel:SetTitle("Set chair offset")
 	MainPanel:SetDeleteOnClose( true )
-	//MainPanel.Close = Close
+	-- MainPanel.Close = Close
 
-	//=======================================
-	// == Panel list of models
-	//=======================================
+	--[[
+	=======================================
+	 == Panel list of models
+	=======================================
+	]]
 	ModelNodes = vgui.Create( "DTree", MainPanel )
 	ModelNodes:Dock( LEFT )
 	ModelNodes:SetWide( 160 )
@@ -101,16 +103,20 @@ function Open()
 		ModelPanel:AddSeat(node)
 	end
 
-	//=======================================
-	// == MODEL PANEL
-	//=======================================
+	--[[
+	=======================================
+	 == MODEL PANEL
+	=======================================
+	]]
 
 	ModelPanel = vgui.Create("DChairEditor", MainPanel )
 	ModelPanel:Dock( FILL )
 
-	//=======================================
-	// == SLIDERS
-	//=======================================
+	--[[
+	=======================================
+ 	== SLIDERS
+	=======================================
+	]]
 
 	local TextValues = {"XPos", "YPos", "ZPos", "PAng", "YAng", "RAng", "Scale" }
 
@@ -123,7 +129,7 @@ function Open()
 		panel:SetWide( 130 )
 		panel:SetPos( 5, 50 * i )
 		panel:SetText( TextValues[ i ] )
-		//panel.OnValueChanged = RequestUpdate
+		-- panel.OnValueChanged = RequestUpdate
 
 		if i <= 3 then
 			panel:SetMinMax( -100, 100 )
@@ -139,9 +145,11 @@ function Open()
 		ValuesList[i] = panel
 	end
 
-	//=======================================
-	// == COPY PASTE
-	//=======================================
+	--[[
+	=======================================
+	 == COPY PASTE
+	=======================================
+	]]
 
 	local Copy = vgui.Create("DButton", MainPanel )
 	Copy:SetText("COPY")
@@ -158,14 +166,18 @@ function Open()
 	Paste.DoClick = function()
 	end
 
-	//=======================================
-	// == SORT ITEMS BY NAME
-	//=======================================
+	--[[
+	=======================================
+	 == SORT ITEMS BY NAME
+	=======================================
+	]]
 
-	/*local Items = ModelNodes.Items
+	--[[
+	local Items = ModelNodes.Items
 	table.sort( Items, function( a, b )
 		return a.ModelName < b.ModelName
-	end )*/
+	end )
+	]]
 
 	MainPanel:MakePopup()
 end
@@ -191,13 +203,15 @@ function GetCurrentTranslations()
 	}
 end
 
-/*function RequestUpdate()
+--[[
+function RequestUpdate()
 	for _, seat in ipairs(ModelPanel.Seats) do
 		if IsValid(seat) && seat.Id == SeatNodes:GetSelectedItem().Id then
 			seat.Offset = {
 		end
 	end
-end*/
+end
+]]
 
 concommand.Add("cinema_chaireditor", Open )
 
@@ -213,9 +227,11 @@ AccessorFunc( PANEL, "colColor", 		"Color" )
 AccessorFunc( PANEL, "bAnimated", 		"Animated" )
 
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: Init
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:Init()
 	self.Entity = nil
 	self.Seats = {}
@@ -244,9 +260,11 @@ function PANEL:Init()
 	self.RightDrag = false
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: SetDirectionalLight
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:SetDirectionalLight( iDirection, color )
 	self.DirectionalLight[iDirection] = color
 end
@@ -255,33 +273,37 @@ function PANEL:ResetCamera()
 	self:SetCamPos( self.ViewAngles:Forward() * self.ViewDistance )
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: OnSelect
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:SetModel( strModelName )
 	Msg("SETTING MODEL: " .. strModelName .. "\n")
 
-	// Note - there's no real need to delete the old
-	// entity, it will get garbage collected, but this is nicer.
+	-- Note - there's no real need to delete the old
+	-- entity, it will get garbage collected, but this is nicer.
 	if ( IsValid( self.Entity ) ) then
 		self.Entity:Remove()
 		self.Entity = nil
 	end
 
-	// Note: Not in menu dll
+	-- Note: Not in menu dll
 	if ( !ClientsideModel ) then return end
 
 	self.Entity = ClientsideModel( strModelName, RENDER_GROUP_OPAQUE_ENTITY )
 	if ( !IsValid(self.Entity) ) then return end
 
-	//self.Entity:SetNoDraw( true )
+	-- self.Entity:SetNoDraw( true )
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: OnSelect
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:SetSeat(node)
-	// Note: Not in menu dll
+	-- Note: Not in menu dll
 	if ( !ClientsideModel ) then return end
 
 	for _, seat in ipairs(self.Seats) do
@@ -293,11 +315,13 @@ function PANEL:SetSeat(node)
 	table.insert( self.Seats, seat )
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: OnSelect
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:AddSeat(node)
-	// Note: Not in menu dll
+	-- Note: Not in menu dll
 	if ( !ClientsideModel ) then return end
 
 	local seat = ClientsideModel( "models/player/kleiner.mdl", RENDER_GROUP_OPAQUE_ENTITY )
@@ -310,12 +334,14 @@ function PANEL:AddSeat(node)
 end
 
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: OnMousePressed
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:Paint()
 	if ( !IsValid( self.Entity ) ) then return end
-	//if ( !IsValid( self.Seats ) ) then return end
+	-- if ( !IsValid( self.Seats ) ) then return end
 
 	local x, y = self:LocalToScreen( 0, 0 )
 
@@ -373,9 +399,11 @@ function PANEL:Paint()
 	self.LastPaint = RealTime()
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: RunAnimation
----------------------------------------------------------*/
+---------------------------------------------------------\
+]]
 function PANEL:RunAnimation()
 	for _, seat in ipairs(self.Seats) do
 		if IsValid(seat) then
@@ -384,19 +412,19 @@ function PANEL:RunAnimation()
 	end
 end
 
-/*---------------------------------------------------------
+--[[
+---------------------------------------------------------
    Name: LayoutEntity
----------------------------------------------------------*/
+---------------------------------------------------------
+]]
 function PANEL:LayoutEntity( Entity )
-	//
-	// This function is to be overriden
-	//
+	-- This function is to be overriden
 
-	//if ( self.bAnimated ) then
-	//	self:RunAnimation()
-	//end
+	-- if ( self.bAnimated ) then
+	-- 	self:RunAnimation()
+	-- end
 
-	//Entity:SetAngles( Angle( 0, RealTime()*10,  0) )
+	-- Entity:SetAngles( Angle( 0, RealTime()*10,  0) )
 end
 
 function PANEL:OnMousePressed( mousecode )

@@ -40,9 +40,9 @@ hook.Add( "InitPostEntity", "CheckMapSupport", function()
 	end
 end )
 
-/*
+--[[
 	HUD Elements to hide
-*/
+]]
 GM.HUDToHide = {
 	"CHudHealth",
 	"CHudSuitPower",

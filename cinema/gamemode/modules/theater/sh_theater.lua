@@ -82,9 +82,7 @@ function THEATER:GetSize()
 	return self._Width, self._Height
 end
 
-/*
-	Attributes
-*/
+-- Attributes
 function THEATER:IsPrivate()
 	return bit.band(self._Flags, THEATER_PRIVATE) == THEATER_PRIVATE
 end
@@ -97,9 +95,7 @@ function THEATER:IsReplicated()
 	return bit.band(self._Flags, THEATER_REPLICATED) == THEATER_REPLICATED
 end
 
-/*
-	Video
-*/
+-- Video
 function THEATER:SetVideo( Video, PreventDefault )
 	if !Video then return end
 
@@ -176,9 +172,7 @@ function THEATER:VideoOwnerSteamID()
 	return self._Video and self._Video:GetOwnerSteamID() or 'STEAM_0:0:0'
 end
 
-/*
-	Private Theater
-*/
+-- Private Theater
 function THEATER:GetOwner()
 	return self._Owner
 end
@@ -231,9 +225,7 @@ if SERVER then
 		self:PlayDefault()
 	end
 
-	/*
-		Thumbnail Entity
-	*/
+	-- Thumbnail Entity
 	function THEATER:SetupThumbnailEntity( ent )
 		if !IsValid( self._ThumbEnt ) then
 
@@ -259,9 +251,7 @@ if SERVER then
 		self._ThumbEnt:SetTitle( self:VideoTitle() )
 	end
 
-	/*
-		Video Playback
-	*/
+	-- Video Playback
 	function THEATER:OnFinishedPlaying()
 		self._Finished = true
 		self:NextVideo()
@@ -506,9 +496,7 @@ if SERVER then
 		end )
 	end
 
-	/*
-		Queue
-	*/
+	-- Queue
 	function THEATER:GetQueue()
 		return self._Queue
 	end
@@ -561,9 +549,7 @@ if SERVER then
 		end
 	end
 
-	/*
-		Vote Skip
-	*/
+	-- Vote Skip
 	function THEATER:SkipVideo()
 		self:NextVideo()
 	end
@@ -648,9 +634,7 @@ if SERVER then
 	end
 
 
-	/*
-		Players
-	*/
+	-- Players
 	function THEATER:NumPlayers()
 		return table.Count(self.Players)
 	end
@@ -732,9 +716,7 @@ if SERVER then
 		end
 	end
 
-	/*
-		Private Theater
-	*/
+	-- Private Theater
 	function THEATER:ResetOwner()
 		self._Owner = nil
 		self._QueueLocked = false

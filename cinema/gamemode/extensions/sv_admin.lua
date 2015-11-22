@@ -1,15 +1,17 @@
-// PLEASE EDIT THIS FOR YOUR SERVER!
+-- PLEASE EDIT THIS FOR YOUR SERVER!
 local SuperAdmins = {
-	/*"STEAM_0:1:6044247",	// MacDGuy
-	"STEAM_0:1:18712009",	// Foohy
-	"STEAM_0:1:15862026",	// Sam
-	"STEAM_0:0:5129735",	// Mr. Sunabouzu
-	"STEAM_0:0:15339565",	// Clopsy
-	"STEAM_0:1:4556804",	// Azuisleet*/
+	--[[
+	"STEAM_0:1:6044247",	-- MacDGuy
+	"STEAM_0:1:18712009",	-- Foohy
+	"STEAM_0:1:15862026",	-- Sam
+	"STEAM_0:0:5129735",	-- Mr. Sunabouzu
+	"STEAM_0:0:15339565",	-- Clopsy
+	"STEAM_0:1:4556804",	-- Azuisleet
+	]]
 }
 
 local Admins = {
-	// PLEASE EDIT
+	-- PLEASE EDIT
 }
 
 hook.Add( "PlayerInitialSpawn", "AuthAdmin", function( ply )
@@ -27,7 +29,7 @@ concommand.Add( "cinema_runlua", function( ply, cmd, args )
 
 	local lua = table.concat( args, " " )
 
-	RunString( "function CinemaRunLua() end" ) // clear out the last function, incase the new code is invalid
+	RunString( "function CinemaRunLua() end" ) -- clear out the last function, incase the new code is invalid
 	RunString( "function CinemaRunLua() " .. lua .. " end " )
 
 	status, err = pcall( CinemaRunLua )
@@ -76,7 +78,7 @@ concommand.Add( "cinema_changelevel", function( ply, cmd, args )
 			v:ChatPrint( "Changing level to " .. MapName )
 		end
 
-		// Finally, change level!
+		-- Finally, change level!
 		timer.Simple( 2, function()
 			RunConsoleCommand( "changelevel", MapName )
 		end )

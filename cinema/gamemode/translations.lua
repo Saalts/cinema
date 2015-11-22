@@ -1,5 +1,4 @@
 if CLIENT then
-	
 	local Debug = CreateClientConVar( "cinema_translation_debug", 0, false, false )
 
 	translations = {}
@@ -60,11 +59,9 @@ if CLIENT then
 
 		-- Parse tags
 		if string.find(value, patterns.tag) then
-
 			local tbl = {}
 
 			while true do
-
 				-- Find first tag occurance
 				local start, stop = string.find(value, patterns.tag)
 
@@ -91,11 +88,9 @@ if CLIENT then
 
 				-- Reduce translation string past tag
 				value = value:sub(stop + 1, string.len(value))
-
 			end
 
 			value = tbl
-
 		end
 
 		return istable(value) and value or {value}
@@ -117,14 +112,13 @@ if CLIENT then
 
 	T = translations.Format
 	C = translations.Compile
-
 end
 
 -- Load language files
 local LanguageFiles = file.Find( GM.FolderName .. "/gamemode/localization/*", "LUA" )
 for _, filename in pairs( LanguageFiles ) do
 	if SERVER then
-		AddCSLuaFile( "localization/" .. filename )		
+		AddCSLuaFile( "localization/" .. filename )
 	else
 		LANG = {}
 		include( "localization/" .. filename )

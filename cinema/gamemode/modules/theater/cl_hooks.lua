@@ -1,17 +1,21 @@
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PreVideoLoad
 	Desc: Called prior to a video loading. Return true in a hook
-		to prevent the default behavior for loading videos. This is 
+		to prevent the default behavior for loading videos. This is
 		useful if you want to implement custom player actions for
 		a new video type.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PreVideoLoad( Video )
 end
 
-/*---------------------------------------------------------------------------
+--[[
+---------------------------------------------------------------------------
 	Name: PostVideoLoad
 	Desc: Called after a video has loaded.
----------------------------------------------------------------------------*/
+---------------------------------------------------------------------------
+]]
 function GM:PostVideoLoad( Video )
 	local startTime = CurTime() - Video:StartTime()
 
