@@ -113,34 +113,32 @@ body {
 	line-height: 32pt;
 }
 
+$logo-margin: 5px;
+$logo-zoom: 1.1;
+
 .provider {
+	transition: all 0.1s;
+	-webkit-transition: all 0.1s;
 	display: inline-block;
-
-	& img {
-		width: 180px;
-	}
-
 	background: white;
 	border-radius: 5px;
 	padding: 5px;
-	margin: 0 5px;
+	margin: $logo-margin $logo-margin/2;
 	box-shadow: 5px 5px 20px black;
 
-	transition: all 0.1s;
-	-webkit-transition: all 0.1s;
-
-	transform: scale(1.0, 1.0);
-	-webkit-transform: scale(1.0, 1.0);
-
 	&:hover {
-		transform: scale(1.1, 1.1);
-		-webkit-transform: scale(1.1, 1.1);
+		transform: scale($logo-zoom, $logo-zoom);
+		-webkit-transform: scale($logo-zoom, $logo-zoom);
 
-		margin: 0 20px;
+		margin: $logo-margin $logo-margin*2;
 	}
 
 	&:active {
 		background: black;
+	}
+
+	& img {
+		width: 150px;
 	}
 }
 
