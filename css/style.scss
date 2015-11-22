@@ -33,6 +33,7 @@ body {
 }
 
 .info-container {
+	text-align: center;
 	position: absolute;
 	top: 276px;
 	left: 140px;
@@ -116,7 +117,7 @@ body {
 	display: inline-block;
 
 	& img {
-		width: 200px;
+		width: 180px;
 	}
 
 	background: white;
