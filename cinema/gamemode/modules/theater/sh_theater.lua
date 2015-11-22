@@ -317,31 +317,7 @@ if SERVER then
 		end
 	end
 
-	function THEATER:RequestVideo( ply, url, force )
-		-- Prevent request spam
-		if IsValid(ply) and ply.LastVideoRequest and ply.LastVideoRequest + 0.3 > CurTime() then
-			return
-		end
-
-		if self:IsPrivate() then
-			-- Set new theater owner
-			if !IsValid( self:GetOwner() ) then
-				self:RequestOwner( ply )
-			end
-
-			-- Prevent requests from non-theater-owner if queue is locked
-			if self:IsQueueLocked() and ply != self:GetOwner() then
-				return self:AnnounceToPlayer( ply, 'Theater_OwnerLockedQueue' )
-			end
-		end
-
-		local info = ExtractURLData( url, self )
-
-		-- Invalid request data
-		if !info then
-			return self:AnnounceToPlayer( ply, 'Theater_InvalidRequest' )
-		end
-
+	function THEATER:AddVideo( ply, url, force, info )
 		-- Check for duplicate requests
 		for _, vid in pairs(self:GetQueue()) do
 			if vid:Type() == info.Type and
@@ -428,6 +404,55 @@ if SERVER then
 
 		if IsValid(ply) then
 			ply.LastVideoRequest = CurTime()
+		end
+	end
+
+	function THEATER:RequestVideo( ply, url, force )
+		-- Prevent request spam
+		if IsValid(ply) and ply.LastVideoRequest and ply.LastVideoRequest + 0.3 > CurTime() then
+			return
+		end
+
+		if self:IsPrivate() then
+			-- Set new theater owner
+			if !IsValid( self:GetOwner() ) then
+				self:RequestOwner( ply )
+			end
+
+			-- Prevent requests from non-theater-owner if queue is locked
+			if self:IsQueueLocked() and ply != self:GetOwner() then
+				return self:AnnounceToPlayer( ply, 'Theater_OwnerLockedQueue' )
+			end
+		end
+
+		local info = ExtractURLData( url, self )
+
+		-- Invalid request data
+		if !info then
+			return self:AnnounceToPlayer( ply, 'Theater_InvalidRequest' )
+		end
+
+		if info.Playlist then
+			local service = GetServiceByClass( info.Type )
+			service:GetPlaylistInfo(info.Data, function(videos)
+				for _, video in ipairs(videos) do
+					local url = service.VideoUrl:format(video)
+					local info = ExtractURLData( url, self )
+
+					-- Invalid request data
+					if !info then
+						return self:AnnounceToPlayer( ply, 'Theater_InvalidRequest' )
+					end
+
+					self:AddVideo( ply, url, force, info)
+				end
+			end, function(status)
+				return self:AnnounceToPlayer( ply, status )
+			end)
+
+			return
+		else
+			self:AddVideo( ply, url, force, info )
 		end
 	end
 

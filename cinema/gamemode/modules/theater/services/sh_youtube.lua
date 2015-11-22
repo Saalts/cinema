@@ -2,13 +2,25 @@ local SERVICE = {}
 
 SERVICE.Name 	= "YouTube"
 SERVICE.IsTimed = true
+SERVICE.VideoUrl = "http://youtube.com/watch?v=%s"
 
-local API_KEY = "AIzaSyAjSwUHzyoxhfQZmiSqoIBQpawm2ucF11E"
+local API_KEY = "AIzaSyASLPKvpCG2PVzo9mpvd_hFhNfvZ0dML14"
 
 local METADATA_URL = "https://www.googleapis.com/youtube/v3/videos?id=%s" ..
 		"&key=" .. API_KEY ..
 		"&part=snippet,contentDetails,status" ..
 		"&videoEmbeddable=true&videoSyndicated=true"
+
+local PLAYLIST_URL = "https://www.googleapis.com/youtube/v3/playlistItems?&playlistId=%s" ..
+		"&part=snippet" ..
+		"&maxResults=%s" ..
+		"&key=" .. API_KEY
+
+local PLAYLIST_URL_PAGE = "https://www.googleapis.com/youtube/v3/playlistItems?&playlistId=%s" ..
+		"&part=snippet" ..
+		"&maxResults=%s" ..
+		"&pageToken=%s" ..
+		"&key=" .. API_KEY
 
 function SERVICE:Match( url )
 	return string.match( url.host, "youtu.?be[.com]?" )
@@ -59,12 +71,99 @@ local function convertISO8601Time( duration )
 	return duration
 end
 
+function SERVICE:GetPlaylistVideos( body, length, headers, code, videos, nextPage, size, data, onSuccess, onFailure )
+	local resp = util.JSONToTable( body )
+	if not resp then
+		return onFailure( 'Theater_RequestFailed' )
+	end
+
+	if resp.error then
+		return onFailure( 'Theater_RequestFailed' )
+	end
+
+	if not table.Lookup( resp, 'items') then
+		return onFailure( 'Theater_RequestFailed' )
+	end
+
+	if resp['nextPageToken'] then
+		nextPage = resp['nextPageToken']
+	end
+
+	local items = resp['items']
+	if #items <= 0 then
+		return onFailure( 'Theater_RequestFailed' )
+	end
+
+	for _, item in ipairs(items) do
+		table.insert(videos, item['snippet']['resourceId']['videoId'])
+	end
+
+	local url = nil
+	if nextPage then
+		url = PLAYLIST_URL_PAGE:format( data, 50, nextPage )
+	end
+
+	if not nextPage or not url then
+		onFailure( 'Theater_RequestFailed' )
+	end
+
+	if #videos == size then
+		if onSuccess then
+			pcall(onSuccess, videos)
+		end
+	else
+		self:Fetch( url, function(body, length, headers, code)
+			self:GetPlaylistVideos(body, length, headers, code, videos, nextPage, size, data, onSuccess, onFailure)
+		end, onFailure)
+	end
+end
+
+function SERVICE:GetPlaylistInfo( data, onSuccess, onFailure )
+	local getSize = function( body, length, headers, code )
+		local resp = util.JSONToTable( body )
+		if not resp then
+			return onFailure( 'Theater_RequestFailed' )
+		end
+
+		if resp.error then
+			return onFailure( 'Theater_RequestFailed' )
+		end
+
+		if not table.Lookup( resp, 'pageInfo.totalResults') then
+			return onFailure( 'Theater_RequestFailed' )
+		end
+
+		local size = resp['pageInfo']['totalResults']
+		print("Got playlist size of" .. size .. ".")
+		local videos = {}
+		local nextPage = nil
+
+		local url = PLAYLIST_URL:format( data, 50 )
+		self:Fetch( url, function(body, length, headers, code)
+			self:GetPlaylistVideos(body, length, headers, code, videos, nextPage, size, data, onSuccess, onFailure)
+		end, onFailure)
+	end
+	local url = PLAYLIST_URL:format( data, 0 )
+	self:Fetch( url, getSize, onFailure)
+end
+
 function SERVICE:GetURLInfo( url )
 	local info = {}
 
 	-- http://www.youtube.com/watch?v=(videoId)
 	if url.query and url.query.v and string.len(url.query.v) > 0 then
-		info.Data = url.query.v
+		-- http://www.youtube.com/watch?v=(videoId)&list=(list)
+		if url.query.list then
+			info.Playlist = true
+			info.Data = url.query.list
+		else
+			info.Data = url.query.v
+		end
+
+	-- http://www.youtube.com/playlist?list=(list)
+	elseif url.query and url.query.list and string.len(url.query.list) > 0 then
+		info.Playlist = true
+		info.Data = url.query.list
 
 	-- http://www.youtube.com/v/(videoId)
 	elseif url.path and string.match(url.path, "^/v/([%a%d-_]+)") then
