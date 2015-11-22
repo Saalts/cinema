@@ -73,12 +73,19 @@ function ADMIN:Init()
 		end
 		self.Options:AddItem(NameButton)
 
-		local LockButton = vgui.Create( "TheaterButton" )
-		LockButton:SetText( T'Theater_QueueLock' )
-		LockButton.DoClick = function(self)
-			RunConsoleCommand( "cinema_lock" )
+		local QueueLockButton = vgui.Create( "TheaterButton" )
+		QueueLockButton:SetText( T'Theater_QueueLock' )
+		QueueLockButton.DoClick = function(self)
+			RunConsoleCommand( "cinema_lock_queue" )
 		end
-		self.Options:AddItem(LockButton)
+		self.Options:AddItem(QueueLockButton)
+
+		local TheaterLockButton = vgui.Create( "TheaterButton" )
+		TheaterLockButton:SetText( T'Theater_TheaterLock' )
+		TheaterLockButton.DoClick = function(self)
+			RunConsoleCommand( "cinema_lock_theater" )
+		end
+		self.Options:AddItem(TheaterLockButton)
 	end
 end
 

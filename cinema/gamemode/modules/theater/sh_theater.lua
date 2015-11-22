@@ -46,6 +46,7 @@ function THEATER:Init( locId, info )
 
 		if o:IsPrivate() then
 			o._QueueLocked = false
+			o._Locked = false
 			o._Owner = nil
 		end
 
@@ -745,6 +746,23 @@ if SERVER then
 		-- Notify theater players of change
 		self:AnnounceToPlayers( {
 			self:IsQueueLocked() and 'Theater_LockedQueue' or 'Theater_UnlockedQueue',
+			ply:Nick()
+		} )
+	end
+
+	function THEATER:IsLocked()
+		return self._Locked
+	end
+
+	function THEATER:ToggleLock( ply )
+		if !IsValid(ply) then return end
+
+		-- Toggle the theater lock
+		self._Locked = !self._Locked
+
+		-- Notify theater players of change
+		self:AnnounceToPlayers( {
+			self:IsLocked() and 'Theater_Locked' or 'Theater_Unlocked',
 			ply:Nick()
 		} )
 	end

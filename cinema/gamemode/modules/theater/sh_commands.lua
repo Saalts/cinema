@@ -250,8 +250,12 @@ else
 		Theater:SkipVideo()
 	end )
 
-	TheaterPrivilegedCommand( "cinema_lock", function( Theater, ply, cmd, args )
+	TheaterPrivilegedCommand( "cinema_lock_queue", function( Theater, ply, cmd, args )
 		Theater:ToggleQueueLock( ply )
+	end )
+
+	TheaterPrivilegedCommand( "cinema_lock_theater", function( Theater, ply, cmd, args)
+		Theater:ToggleLock( ply )
 	end )
 
 	TheaterPrivilegedCommand( "cinema_reset", function( Theater, ply, cmd, args )

@@ -30,6 +30,8 @@ LANG.Theater_NotifyOwnership        = "You're now the owner of the private theat
 LANG.Theater_OwnerLockedQueue       = "The owner of the theater has locked the queue."
 LANG.Theater_LockedQueue            = C(ColHighlight,"%s",ColDefault," has locked the theater queue.")
 LANG.Theater_UnlockedQueue          = C(ColHighlight,"%s",ColDefault," has unlocked the theater queue.")
+LANG.Theater_Locked                 = C(ColHighlight,"%s",ColDefault," has locked the theater.")
+LANG.Theater_Unlocked               = C(ColHighlight,"%s",ColDefault," has unlocked the theater.")
 LANG.Theater_OwnerUseOnly           = "Only the theater owner can use that."
 LANG.Theater_PublicVideoLength      = "Public theater requests are limited to %s second(s) in length."
 LANG.Theater_PlayerVoteSkipped      = C(ColHighlight,"%s",ColDefault," has voted to skip ",ColHighlight,"(%s/%s)",ColDefault,".")
@@ -59,6 +61,7 @@ LANG.Theater_Seek               = "Seek"
 LANG.Theater_Reset              = "Reset"
 LANG.Theater_ChangeName         = "Change Name"
 LANG.Theater_QueueLock          = "Toggle Queue Lock"
+LANG.Theater_TheaterLock          = "Toggle Theater Lock"
 LANG.Theater_SeekQuery          = "HH:MM:SS or number of seconds (e.g. 1:30:00 or 5400)"
 
 -- Theater list

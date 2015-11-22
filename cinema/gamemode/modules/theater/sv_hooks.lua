@@ -88,6 +88,15 @@ function GM:PrePlayerEnterTheater( ply, Theater )
 	end
 ]]
 
+	if Theater:IsLocked() then
+		-- Respawn the player
+		ply:Spawn()
+
+		-- Prevent the player from being added to the theater
+		-- and being sent videos, etc.
+		return false
+	end
+
 	return true
 end
 
