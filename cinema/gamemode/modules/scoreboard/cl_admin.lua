@@ -47,6 +47,13 @@ function ADMIN:Init()
 	end
 	self.Options:AddItem(SeekButton)
 
+	local TheaterLockButton = vgui.Create( "TheaterButton" )
+	TheaterLockButton:SetText( T'Theater_TheaterLock' )
+	TheaterLockButton.DoClick = function(self)
+		RunConsoleCommand( "cinema_lock_theater" )
+	end
+	self.Options:AddItem(TheaterLockButton)
+
 	-- Admin-only options
 	if LocalPlayer():IsAdmin() then
 		-- Reset the theater
@@ -79,13 +86,6 @@ function ADMIN:Init()
 			RunConsoleCommand( "cinema_lock_queue" )
 		end
 		self.Options:AddItem(QueueLockButton)
-
-		local TheaterLockButton = vgui.Create( "TheaterButton" )
-		TheaterLockButton:SetText( T'Theater_TheaterLock' )
-		TheaterLockButton.DoClick = function(self)
-			RunConsoleCommand( "cinema_lock_theater" )
-		end
-		self.Options:AddItem(TheaterLockButton)
 	end
 end
 
