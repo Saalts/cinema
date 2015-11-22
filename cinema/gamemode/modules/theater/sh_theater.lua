@@ -220,6 +220,7 @@ if SERVER then
 
 		if self:IsPrivate() then
 			self._QueueLocked = false
+			self._Locked = false
 			self._Owner = nil
 		end
 
