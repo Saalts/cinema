@@ -2,32 +2,26 @@
 control.Add( KEY_EQUAL, function( enabled )
 	-- If they're typing in Chat, ignore it
 	if LocalPlayer():IsTyping() then return end
-	
+
 	if enabled then
-		
 		local increment = 5
 		local volume = math.Round( theater.GetVolume() / increment ) * increment
 
 		RunConsoleCommand( "cinema_volume", volume + increment )
-
 	end
-
 end )
 
 -- Decrement Volume
 control.Add( KEY_MINUS, function( enabled )
 	-- If they're typing in Chat, ignore it
 	if LocalPlayer():IsTyping() then return end
-	
+
 	if enabled then
-		
 		local increment = 5
 		local volume = math.Round( theater.GetVolume() / increment ) * increment
 
 		RunConsoleCommand( "cinema_volume", volume - increment )
-
 	end
-
 end )
 
 module( "theater", package.seeall )
@@ -45,7 +39,6 @@ Queue = {}
 local _Volume = -1
 
 function RegisterPanel( Theater )
-
 	Fullscreen = false
 
 	-- There should only be one panel playing
@@ -54,8 +47,7 @@ function RegisterPanel( Theater )
 	local tw, th = Theater:GetSize()
 	local scale = tw / th
 
-	local h = GetConVar("cinema_resolution") and
-		GetConVar("cinema_resolution"):GetInt() or 720
+	local h = GetConVar("cinema_resolution") and GetConVar("cinema_resolution"):GetInt() or 720
 
 	local panel = vgui.Create( "TheaterHTML", vgui.GetWorldPanel(), "TheaterScreen" )
 	panel:SetSize( h * scale, h )
@@ -80,7 +72,6 @@ function RegisterPanel( Theater )
 	RefreshPanel()
 
 	return panel
-
 end
 
 function ActivePanel()
@@ -88,7 +79,6 @@ function ActivePanel()
 end
 
 function RefreshPanel( reload )
-
 	local panel = ActivePanel()
 
 	if ValidPanel(panel) then
@@ -103,16 +93,14 @@ function RefreshPanel( reload )
 		RemovePanels()
 		LoadVideo( LastVideo )
 	end
-	
-	ResizePanel()
 
+	ResizePanel()
 end
 
 function ResizePanel()
-	
 	local panel = ActivePanel()
 	if !ValidPanel(panel) then return end
-	
+
 	local Theater = LocalPlayer():GetTheater()
 	local w, h = Theater:GetSize()
 	local scale = w / h
@@ -123,9 +111,8 @@ function ResizePanel()
 	-- Adjust width based on the theater screen's scale
 	w = math.floor(h2 * scale)
 	h = h2
-	
-	panel:SetSize(w, h)
 
+	panel:SetSize(w, h)
 end
 
 local function RemovePanel(panel)
@@ -134,7 +121,6 @@ local function RemovePanel(panel)
 end
 
 function RemovePanels()
-
 	local panel = ActivePanel()
 	if ValidPanel(panel) then
 		RemovePanel(panel)
@@ -145,7 +131,7 @@ function RemovePanels()
 		if ValidPanel(p) and loc != LocalPlayer():GetLocation() then
 			RemovePanel(p)
 			Panels[loc] = nil
-		end	
+		end
 	end
 
 	-- Remove any remaining panels that might exist
@@ -166,7 +152,6 @@ function RemovePanels()
 
 	-- Remove theater drawing info
 	LastTheater = nil
-
 end
 net.Receive( "PlayerLeaveTheater", theater.RemovePanels )
 hook.Add( "OnReloaded", "RemoveAllPanels", theater.RemovePanels )
@@ -177,7 +162,6 @@ function CurrentVideo()
 end
 
 function ToggleFullscreen()
-	
 	local panel = ActivePanel()
 	if !ValidPanel(panel) then return end
 
@@ -195,7 +179,6 @@ function ToggleFullscreen()
 
 	Fullscreen = !Fullscreen
 	RunConsoleCommand("cinema_fullscreen_freeze", tostring(Fullscreen))
-
 end
 
 function GetQueue()
@@ -214,7 +197,6 @@ function GetVolume()
 end
 
 function SetVolume( fVolume )
-
 	fVolume = tonumber(fVolume)
 	if !fVolume then return end
 
@@ -227,11 +209,9 @@ function SetVolume( fVolume )
 
 	_Volume = fVolume
 	LastInfoDraw = CurTime()
-
 end
 
 function PollServer()
-
 	-- Prevent spamming requests
 	if LocalPlayer().LastTheaterRequest and LocalPlayer().LastTheaterRequest + 1 > CurTime() then
 		return
@@ -241,11 +221,9 @@ function PollServer()
 	net.SendToServer()
 
 	LocalPlayer().LastTheaterRequest = CurTime()
-
 end
 
 function ReceiveVideo()
-
 	LastTheater = nil -- see cl_draw.lua
 
 	local info = {}
@@ -266,7 +244,6 @@ function ReceiveVideo()
 	-- Private theater owner
 	local Theater = LocalPlayer():GetTheater()
 	if Theater then
-
 		Theater:SetVideo( Video )
 
 		if Theater:IsPrivate() then
@@ -275,17 +252,14 @@ function ReceiveVideo()
 				Theater._Owner = owner
 			end
 		end
-		
 	end
-	
+
 	NumVoteSkips = 0
 	LastInfoDraw = CurTime()
-
 end
 net.Receive( "TheaterVideo", ReceiveVideo )
 
 function ReceiveSeek()
-
 	local seconds = net.ReadFloat()
 
 	local panel = ActivePanel()
@@ -301,20 +275,16 @@ function ReceiveSeek()
 	panel:QueueJavascript( js )
 
 	PollServer()
-
 end
-
 net.Receive( "TheaterSeek", ReceiveSeek )
 
 function ReceiveTheaters()
-
 	table.Empty( Theaters )
 
 	local tbl = net.ReadTable()
 
 	local Theater = nil
 	for _, v in pairs( tbl ) do
-
 		-- Merge shared theater data
 		local loc = Location.GetLocationByIndex( v.Location )
 		if loc and loc.Theater then
@@ -328,18 +298,15 @@ function ReceiveTheaters()
 		end
 
 		Theaters[v.Location] = Theater
-
 	end
 
 	if ValidPanel( Gui ) and ValidPanel( Gui.TheaterList ) then
 		Gui.TheaterList:UpdateList()
 	end
-
 end
 net.Receive( "TheaterInfo", ReceiveTheaters )
 
 function ReceiveQueue()
-
 	table.Empty( Queue )
 
 	local queue = net.ReadTable()
@@ -350,12 +317,10 @@ function ReceiveQueue()
 	if ValidPanel( GuiQueue ) then
 		GuiQueue:UpdateList()
 	end
-
 end
 net.Receive( "TheaterQueue", ReceiveQueue )
 
 function ReceiveVoteSkips()
-
 	local name = net.ReadString()
 	local skips = net.ReadInt(7)
 	local required = net.ReadInt(7)
@@ -369,27 +334,23 @@ function ReceiveVoteSkips()
 
 	NumVoteSkips = skips
 	ReqVoteSkips = required
-
 end
 net.Receive( "TheaterVoteSkips", ReceiveVoteSkips )
 
 function LoadVideo( Video )
-
 	if !Video then return end
 
 	local theaterUrl = GetConVarString( "cinema_url" )
 
 	local panel = ActivePanel()
 	if !ValidPanel( panel ) then
-
 		-- Initialize HTML panel
 		local Theater = LocalPlayer():GetTheater()
 		if !Theater then return end
-		
+
 		-- Initialize panel and load the webpage
 		panel = RegisterPanel( Theater )
 		panel:OpenURL( theaterUrl )
-
 	end
 
 	if hook.Run( "PreVideoLoad", Video ) then return end
@@ -404,5 +365,4 @@ function LoadVideo( Video )
 	end
 
 	hook.Run( "PostVideoLoad", Video )
-
 end

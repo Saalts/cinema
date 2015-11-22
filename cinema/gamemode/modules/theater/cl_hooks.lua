@@ -6,16 +6,13 @@
 		a new video type.
 ---------------------------------------------------------------------------*/
 function GM:PreVideoLoad( Video )
-
 end
-
 
 /*---------------------------------------------------------------------------
 	Name: PostVideoLoad
 	Desc: Called after a video has loaded.
 ---------------------------------------------------------------------------*/
 function GM:PostVideoLoad( Video )
-
 	local startTime = CurTime() - Video:StartTime()
 
 	-- Output debug information
@@ -30,5 +27,4 @@ function GM:PostVideoLoad( Video )
 
 	-- Keep previous video for refreshing the theater
 	theater.LastVideo = Video
-
 end

@@ -11,7 +11,6 @@ util.AddNetworkString( "TheaterAnnouncement" )
 module( "theater", package.seeall )
 
 function Initialize()
-
 	game.CleanUpMap()
 
 	-- Make sure we can depends on the Location module
@@ -26,22 +25,18 @@ function Initialize()
 	for name, loc in pairs(locations) do
 		GetByLocation( loc.Index, true )
 	end
-
 end
 hook.Add( "InitPostEntity", "InitTheaters", Initialize )
 hook.Add( "OnReloaded", "ReInitTheaters", Initialize )
 
 function PlayerJoin( ply, locId )
-
 	local Theater = GetByLocation(locId, true)
 	if !Theater then return end
-	
-	Theater:AddPlayer(ply)
 
+	Theater:AddPlayer(ply)
 end
 
 function PlayerLeave( ply, locId )
-
 	if !locId then
 		locId = ply:GetLocation()
 	end
@@ -50,12 +45,10 @@ function PlayerLeave( ply, locId )
 	if !Theater then return end
 
 	Theater:RemovePlayer(ply)
-
 end
 hook.Add( "PlayerDisconnected", "TheaterDisconnected", PlayerLeave )
 
 function RequestTheaterInfo( ply, force )
-
 	if !IsValid(ply) then return end
 
 	-- Prevent spamming requests
@@ -67,7 +60,6 @@ function RequestTheaterInfo( ply, force )
 	local info = {}
 	local th = nil
 	for _, Theater in pairs( GetTheaters() ) do
-		
 		-- Theater is set to not broadcast
 		if !Theater:IsReplicated() and Theater != ply:GetTheater() then
 			continue
@@ -93,7 +85,6 @@ function RequestTheaterInfo( ply, force )
 		end
 
 		table.insert(info, th)
-
 	end
 
 	if #info > 0 then
@@ -138,14 +129,12 @@ function RequestTheaterInfo( ply, force )
 	end
 
 	ply.LastTheaterRequest = CurTime()
-
 end
 net.Receive("TheaterInfo", function(len, ply)
 	theater.RequestTheaterInfo(ply)
 end)
 
 function GetVideoInfo( data, Type, onSuccess, onFailure )
-	
 	if !data or !Type then return end
 
 	local service = Services[ Type ]
@@ -154,5 +143,4 @@ function GetVideoInfo( data, Type, onSuccess, onFailure )
 	else
 		return pcall(onFailure, 404)
 	end
-
 end

@@ -32,18 +32,14 @@ end
 local p = 10
 local w, h, hoffset
 function Draw()
-
 	surface.SetFont( WarningFont )
 
 	for k, msg in pairs( Messages ) do
-
 		w, h = surface.GetTextSize( msg )
 
 		hoffset = ((h * k) - h) * 2
 
 		draw.RoundedBox( 4, (ScrW()/2) - w/2 - p, h - p + hoffset, w + p*2, h + p*2, color_box_bg )
 		draw.SimpleText( msg, WarningFont, ScrW()/2 - w/2, hoffset + h, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM )
-
 	end
-
 end

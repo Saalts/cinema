@@ -4,7 +4,6 @@ CreateConVar( "cinema_help_url", "http://saalts.github.io/cinema/help.html", FCV
 CreateConVar( "cinema_queue_mode", 1, { FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_REPLICATED }, "1 = Videos may be voted up or down\n2 = Videos are played in the order they're requested" )
 
 if CLIENT then
-
 	CreateClientConVar( "cinema_drawnames", 1, true, false )
 	CreateClientConVar( "cinema_volume", 25, true, false )
 	CreateClientConVar( "cinema_hd", 0, true, false )
@@ -16,7 +15,7 @@ if CLIENT then
 
 	cvars.AddChangeCallback( "cinema_resolution", function(cmd, old, new)
 		new = tonumber(new)
-		
+
 		if !new then
 			return
 		elseif new < 2 then
@@ -30,7 +29,7 @@ if CLIENT then
 
 	cvars.AddChangeCallback( "cinema_volume", function(cmd, old, new)
 		new = tonumber(new)
-		
+
 		if !new then
 			return
 		elseif new < 0 then
@@ -71,7 +70,6 @@ if CLIENT then
 
 	-- Scroll panel
 	hook.Add( "PlayerBindPress", "TheaterScroll", function( ply, bind, pressed )
-
 		local panel = theater.ActivePanel()
 		if !ValidPanel(panel) then return end
 
@@ -81,7 +79,6 @@ if CLIENT then
 		elseif bind == "invprev" then
 			panel:QueueJavascript("window.scrollBy(0,-"..amount..")")
 		end
-
 	end )
 
 	-- Hide Players
@@ -89,7 +86,6 @@ if CLIENT then
 	local undomodelblend = false
 	local matWhite = Material("models/debug/debugwhite")
 	hook.Add( "PrePlayerDraw", "TheaterHidePlayers", function( ply )
-
 		-- Local player in a theater and hide players enabled
 		if HidePlayers:GetBool() and LocalPlayer():InTheater() then
 
@@ -101,9 +97,7 @@ if CLIENT then
 			render.SetColorModulation(0.2, 0.2, 0.2)
 
 			undomodelblend = true
-
 		end
-
 	end )
 
 	hook.Add( "PostPlayerDraw", "TheaterHidePlayers", function( ply )
@@ -118,13 +112,11 @@ if CLIENT then
 	-- Mute theater on losing focus to Garry's Mod window
 	local FocusState, HasFocus, LastVolume = true, true, theater.GetVolume()
 	hook.Add( "Think", "TheaterMuteOnFocusChange", function()
-
 		if not MuteNoFocus:GetBool() then return end
 
 		HasFocus = system.HasFocus()
 
 		if ( LastState and !HasFocus ) or ( !LastState and HasFocus ) then
-			
 			if HasFocus == true then
 				theater.SetVolume( LastVolume )
 				LastVolume = nil
@@ -134,81 +126,64 @@ if CLIENT then
 			end
 
 			LastState = HasFocus
-
 		end
-
 	end )
-
 else
-
 	local fcvar = { FCVAR_ARCHIVE, FCVAR_DONTRECORD }
 
 	-- Settings
 	CreateConVar( "cinema_video_duration_max", 3 * 60 * 60, fcvar, "Maximum video duration for requests in public theaters." )
-	CreateConVar( "cinema_skip_ratio", 0.66, fcvar, "Ratio between 0-1 determining how many players are required to voteskip a video." )	
+	CreateConVar( "cinema_skip_ratio", 0.66, fcvar, "Ratio between 0-1 determining how many players are required to voteskip a video." )
 	-- Permissions
 	CreateConVar( "cinema_allow_url", 0, fcvar, "Allow any url to be set in private theaters." )
 	CreateConVar( "cinema_allow_reset", 0, fcvar, "Reset the theater after all players have left." )
 	CreateConVar( "cinema_allow_voice", 0, fcvar, "Allow theater viewers to talk amongst themselves." )
 	CreateConVar( "cinema_allow_3dvoice", 1, fcvar, "Use 3D voice chat." )
-	
+
 	concommand.Add("cinema_fullscreen_freeze", function(ply,cmd,args)
 		ply:Freeze(tobool(args[1]))
 	end)
-	
-	local function TheaterCommand( name, Function )
 
+	local function TheaterCommand( name, Function )
 		if !Function then return end
 
 		concommand.Add( name, function( ply, ... )
-
 			if !IsValid(ply) then return end
 
 			local Theater = ply:GetTheater()
 			if Theater then
-
 				local status, err = pcall(Function, Theater, ply, ...)
 
 				if !status then
 					Msg("ERROR: There was a problem running the command '" .. name .. "'\n")
 					Msg(tostring(err) .. "\n")
 				end
-
 			end
-
 		end)
-
 	end
 
 	TheaterCommand( "cinema_video_request", function( Theater, ply, cmd, args )
-
 		local Video = args[1]
 		if !Video then return end
-		
-		Theater:RequestVideo(ply, Video)
 
+		Theater:RequestVideo(ply, Video)
 	end)
 
 	TheaterCommand( "cinema_video_remove", function( Theater, ply, cmd, args )
-
 		local id = tonumber(args[1])
 		if !id then return end
-		
-		Theater:RemoveQueuedVideo(ply, id)
 
+		Theater:RemoveQueuedVideo(ply, id)
 	end)
 
 	TheaterCommand( "cinema_name", function( Theater, ply, cmd, args )
-
 		local name = args[1]
 		if !name then return end
-		
-		Theater:SetName( name, ply )
 
+		Theater:SetName( name, ply )
 	end)
 
 	TheaterCommand( "cinema_voteskip", function( Theater, ply, cmd, args )
-
 		-- Prevent player from spamming command
 		if ply.LastVoteSkip and ply.LastVoteSkip + 1 > CurTime() then
 			return
@@ -217,32 +192,26 @@ else
 		Theater:VoteSkip(ply)
 
 		ply.LastVoteSkip = CurTime()
-
 	end)
 
 	TheaterCommand( "cinema_voteup", function( Theater, ply, cmd, args )
-
 		local QueueId = tonumber(args[1])
 		if !QueueId then return end
 
 		Theater:VoteQueuedVideo(ply, QueueId, true)
-
 	end)
 
 	/*
 		Admin/Developer Commands
 	*/
 	local function TheaterPrivilegedCommand( name, Function )
-
 		if !Function then return end
 
 		concommand.Add( name, function( ply, ... )
-
 			if !IsValid(ply) then return end
 
 			local Theater = ply:GetTheater()
 			if Theater then
-
 				if ply:IsAdmin() or
 					( Theater:IsPrivate() and Theater:GetOwner() == ply ) or
 					( ply.IsPixelTail && ply:IsPixelTail() ) then
@@ -253,52 +222,39 @@ else
 						Msg("ERROR: There was a problem running the command '" .. name .. "'\n")
 						Msg(tostring(err) .. "\n")
 					end
-
 				end
-
 			end
-
 		end)
-
 	end
 
 	TheaterPrivilegedCommand( "cinema_video_set", function( Theater, ply, cmd, args )
-
 		local VideoUrl = args[1]
 		if !VideoUrl then return end
 
 		Theater:RequestVideo(ply, VideoUrl, true)
-
 	end )
 
 	TheaterPrivilegedCommand( "cinema_seek", function( Theater, ply, cmd, args )
-
 		local seconds = args[1]
 		if !seconds then return end
 
 		Theater:Seek(seconds)
-
 	end )
 
 	TheaterPrivilegedCommand( "cinema_forceskip", function( Theater, ply, cmd, args )
-
 		Theater:AnnounceToPlayers( {
 			'Theater_ForceSkipped',
 			ply:Nick()
 		} )
 
 		Theater:SkipVideo()
-
 	end )
 
 	TheaterPrivilegedCommand( "cinema_lock", function( Theater, ply, cmd, args )
-
 		Theater:ToggleQueueLock( ply )
-
 	end )
 
 	TheaterPrivilegedCommand( "cinema_reset", function( Theater, ply, cmd, args )
-
 		if !ply:IsAdmin() then return end
 
 		Theater:AnnounceToPlayers( {
@@ -307,24 +263,18 @@ else
 		} )
 
 		Theater:Reset()
-
 	end )
 
 	/*
 		Parse URLs in the chat for video requests
 	*/
 	hook.Add( "PlayerSay", "TheaterAutoAdd", function( ply, chat )
-
 		local Theater = ply:GetTheater()
 		if Theater then
-			
 			if theater.ExtractURLData( chat ) then
 				Theater:RequestVideo( ply, chat )
 				return ""
 			end
-
 		end
-
 	end )
-
 end

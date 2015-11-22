@@ -4,12 +4,10 @@ SERVICE.Name 		= "Twitch.TV"
 SERVICE.IsTimed 	= true
 
 function SERVICE:Match( url )
-	return string.match(url.host, "twitch.tv") and
-		string.match(url.path, "^/[%w_]+/%a/(%d+)")
+	return string.match(url.host, "twitch.tv") and string.match(url.path, "^/[%w_]+/%a/(%d+)")
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 	info.Data = string.match(url.path, "^/[%w_]+/%a/(%d+)")
 
@@ -30,13 +28,10 @@ function SERVICE:GetURLInfo( url )
 	end
 
 	return info
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local onReceive = function( body, length, headers, code )
-
 		local response = util.JSONToTable( body )
 
 		-- Stream invalid
@@ -70,7 +65,6 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	-- API call fix
@@ -81,7 +75,6 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 
 	local url = string.format( "https://api.twitch.tv/kraken/videos/%s", id )
 	self:Fetch( url, onReceive, onFailure )
-
 end
 
 theater.RegisterService( 'twitch', SERVICE )
@@ -98,7 +91,6 @@ function SERVICE:Match( url )
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 	info.Data = string.match( url.path, "/([%w_]+)$" )
 
@@ -107,13 +99,10 @@ function SERVICE:GetURLInfo( url )
 	end
 
 	return info
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local onReceive = function( body, length, headers, code )
-
 		local response = util.JSONToTable(body)
 
 		-- Stream invalid
@@ -143,12 +132,10 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	local url = string.format( "https://api.twitch.tv/kraken/streams/%s", data )
 	self:Fetch( url, onReceive, onFailure )
-
 end
 
 theater.RegisterService( 'twitchstream', SERVICE )

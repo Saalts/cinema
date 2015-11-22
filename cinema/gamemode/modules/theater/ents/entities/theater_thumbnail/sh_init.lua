@@ -16,7 +16,6 @@ function ENT:SetupDataTables()
 end
 
 function ENT:OnRemove()
-
 	if CLIENT and ValidPanel(self.HTML) then
 		self.HTML:Remove()
 	end

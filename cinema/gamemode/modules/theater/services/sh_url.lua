@@ -12,47 +12,39 @@ function SERVICE:Match( url )
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 	info.Data = url.encoded
 
 	return info
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local info = {}
 	info.data = data
 
 	local onReceive = function( body, length, headers, code )
-
 		info.title = string.match( body, "<title>(.*)</title>" ) or "(Unknown)"
 
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	-- Parse url
 	local status, url = pcall( url.parse2, data )
 
 	if status and url and url.path then
-		
 		local ext = string.GetExtensionFromFilename( url.path )
 
 		if ext == nil or table.HasValue( self.ValidExtensions, ext ) then
 			self:Fetch( data, onReceive, onFailure )
 			return
 		end
-
 	end
 
 	if onSuccess then
 		pcall(onSuccess, info)
 	end
-
 end
 
 theater.RegisterService( 'url', SERVICE )

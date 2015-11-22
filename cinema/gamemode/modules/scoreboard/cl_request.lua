@@ -1,12 +1,10 @@
 function RequestVideoURL( url )
-
 	if ValidPanel( RequestPanel ) then
 		RequestPanel:OnClose()
 		RequestPanel:Remove()
 	end
 
 	RunConsoleCommand( "cinema_video_request", url )
-
 end
 
 local PANEL = {}
@@ -15,7 +13,6 @@ PANEL.HistoryWidth = 300
 local CloseTexture = Material( "theater/close.png" )
 
 function PANEL:Init()
-
 	RequestPanel = self
 
 	self:SetFocusTopLevel( true )
@@ -64,7 +61,6 @@ function PANEL:Init()
 
 	self.History = vgui.Create( "RequestHistory", self )
 	self.History:SetPaintBackgroundEnabled(false)
-
 end
 
 function PANEL:OnClose()
@@ -75,7 +71,6 @@ function PANEL:OnClose()
 end
 
 function PANEL:CheckClose()
-
 	local x, y = self:CursorPos()
 
 	-- Remove panel if mouse is clicked outside of itself
@@ -84,11 +79,9 @@ function PANEL:CheckClose()
 		self:OnClose()
 		self:Remove()
 	end
-
 end
 
 function PANEL:PerformLayout()
-
 	local w, h = self:GetSize()
 
 	self.CloseButton:SetSize( 32, 32 )
@@ -103,7 +96,6 @@ function PANEL:PerformLayout()
 	self.History:SetWide( self.HistoryWidth )
 
 	self.Controls:Dock( TOP )
-
 end
 
 vgui.Register( "VideoRequestFrame", PANEL, "EditablePanel" )
@@ -114,7 +106,6 @@ HISTORY.TitleHeight = 64
 HISTORY.VidHeight = 32 // 48
 
 function HISTORY:Init()
-
 	self:SetSize( 256, 512 )
 	self:SetPos( 8, ScrH() / 2 - ( self:GetTall() / 2 ) )
 
@@ -144,14 +135,12 @@ function HISTORY:Init()
 		self:AddVideo( request )
 	end
 
-	self.VideoList:SortVideos( function( a, b ) 
+	self.VideoList:SortVideos( function( a, b )
 		return a.lastRequest > b.lastRequest
 	end )
-
 end
 
 function HISTORY:AddVideo( vid )
-
 	if self.Videos[ vid.id ] then
 		self.Videos[ vid.id ]:SetVideo( vid )
 	else
@@ -161,23 +150,19 @@ function HISTORY:AddVideo( vid )
 		self.Videos[ vid.id ] = panel
 		self.VideoList:AddItem( panel )
 	end
-	
 end
 
 function HISTORY:RemoveVideo( vid )
-
 	if ValidPanel( self.Videos[ vid.id ] ) then
 		self.VideoList:RemoveItem( self.Videos[ vid.Id ] )
 		self.Videos[ vid.id ]:Remove()
 		self.Videos[ vid.id ] = nil
 	end
-
 end
 
 local Background = Material( "theater/banner.png" )
 
 function HISTORY:Paint( w, h )
-
 	// Background
 	surface.SetDrawColor( 26, 30, 38, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
@@ -190,11 +175,9 @@ function HISTORY:Paint( w, h )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, -1, 512, self.Title:GetTall() + 1 )
-
 end
 
 function HISTORY:PerformLayout()
-
 	self.Title:SizeToContents()
 	self.Title:SetTall( self.TitleHeight )
 	self.Title:CenterHorizontal()
@@ -207,7 +190,6 @@ function HISTORY:PerformLayout()
 
 	self.Options:Dock( BOTTOM )
 	self.Options:SizeToContents()
-
 end
 
 vgui.Register( "RequestHistory", HISTORY )
@@ -217,7 +199,6 @@ local VIDEO = {}
 VIDEO.Padding = 8
 
 function VIDEO:Init()
-
 	self:SetTall( HISTORY.VidHeight )
 
 	self.Title = Label( "Unknown", self )
@@ -258,7 +239,6 @@ function VIDEO:Init()
 		pcall( function(v)
 			self:GetParent():GetParent():GetParent():RemoveVideo( v )
 		end, self.Video )
-		
 	end
 	self.DeleteVideo.Think = function()
 		if IsMouseOver( self.DeleteVideo ) then
@@ -267,13 +247,11 @@ function VIDEO:Init()
 			self.DeleteVideo:SetAlpha( 25 )
 		end
 	end
-
 end
 
 function VIDEO:SetVideo( vid )
-
 	self.Video = vid
-	
+
 	self:SetTooltip( self.Video.title )
 	self.Title:SetText( self.Video.title )
 
@@ -284,11 +262,9 @@ function VIDEO:SetVideo( vid )
 	end
 
 	self.Requests:SetText( T('Request_PlayCount', self.Video.count) )
-
 end
 
 function VIDEO:PerformLayout()
-
 	self.Title:SizeToContents()
 	local w = math.Clamp(self.Title:GetWide(), 0, 224)
 	self.Title:SetSize(w, self.Title:GetTall())
@@ -310,14 +286,11 @@ function VIDEO:PerformLayout()
 
 	self.DeleteVideo:Center()
 	self.DeleteVideo:AlignRight( 10 )
-	
 end
 
 function VIDEO:Paint( w, h )
-
 	surface.SetDrawColor( 38, 41, 49, 255 )
 	surface.DrawRect( 0, 0, self:GetSize() )
-
 end
 
 vgui.Register( "RequestVideo", VIDEO )

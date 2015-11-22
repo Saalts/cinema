@@ -4,16 +4,14 @@ ENT.DoorClose = Sound("doors/door_wood_close1.wav") //just defaults
 function ENT:Initialize()
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
-	self:SetUseType(SIMPLE_USE)	
+	self:SetUseType(SIMPLE_USE)
 	self:DrawShadow( false )
 
 	local phys = self:GetPhysicsObject()
-	
+
 	if IsValid(phys) then
 		phys:SetMaterial("gmod_silent")
 	end
-
-
 end
 
 function ENT:Use(activator, caller)
@@ -53,7 +51,6 @@ function ENT:GetLinkedDoor()
 end
 
 function ENT:GetTeleportEntity()
-
 	-- Attempt to find entity
 	if !IsValid(self.TeleportEnt) then
 		if self.TeleportName then
@@ -66,9 +63,8 @@ function ENT:GetTeleportEntity()
 			print(self)
 		end
 	end
-	
-	return self.TeleportEnt
 
+	return self.TeleportEnt
 end
 
 function ENT:StartLoading( ply )
@@ -117,21 +113,18 @@ function ENT:Think()
 		self.TeleportPly = nil
 	end
 
-	self:NextThink(CurTime())  
+	self:NextThink(CurTime())
 	return true
 end
 
-
-
 function ENT:KeyValue(key, value)
 	local isEmpty = !value || string.len(value) <= 0
-	
+
 	if key == "OnTeleport" || key == "OnUnlock" || key == "OnUse" then
 		self:StoreOutput(key, value)
 	end
-	
-	if !isEmpty then
 
+	if !isEmpty then
 		if key == "teleportentity" then
 			self.TeleportName = value
 		elseif key == "opendoorsound" then

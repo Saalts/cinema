@@ -2,10 +2,8 @@ AddCSLuaFile()
 DEFINE_BASECLASS( "player_default" )
 
 if ( CLIENT ) then
-
 	CreateConVar( "cl_playercolor", "0.24 0.34 0.41", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255" )
 	-- CreateConVar( "cl_weaponcolor", "0.30 1.80 2.10", { FCVAR_ARCHIVE, FCVAR_USERINFO, FCVAR_DONTRECORD }, "The value is a Vector - so between 0-1 - not between 0-255" )
-
 end
 
 local PLAYER = {}
@@ -28,7 +26,6 @@ PLAYER.DropWeaponOnDie		= false		-- Do we drop our weapon when we die
 PLAYER.TeammateNoCollide 	= true		-- Do we collide with teammates or run straight through them
 PLAYER.AvoidPlayers			= false		-- Automatically swerves around other players
 
-
 --
 -- Set up the network table accessors
 --
@@ -42,7 +39,6 @@ end
 -- Called serverside only when the player spawns
 --
 function PLAYER:Spawn()
-
 	BaseClass.Spawn( self )
 
 	local col = self.Player:GetInfo( "cl_playercolor" )
@@ -50,47 +46,37 @@ function PLAYER:Spawn()
 	self.Player:SetCollisionGroup( COLLISION_GROUP_DEBRIS_TRIGGER )
 	self.Player:SetFOV(85, 0)
 	self.Player:ClearPoseParameters()
-
 end
 
 --
 -- Called on spawn to give the player their default loadout
 --
 function PLAYER:Loadout()
-
 	self.Player:RemoveAllAmmo()
 	self.Player:SwitchToDefaultWeapon()
-
 end
 
 --
 -- Return true to draw local (thirdperson) camera - false to prevent - nothing to use default behaviour
 --
-function PLAYER:ShouldDrawLocal() 
-
+function PLAYER:ShouldDrawLocal()
 	if ( self.TauntCam:ShouldDrawLocalPlayer( self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
 end
 
 --
 -- Allow player class to create move
 --
 function PLAYER:CreateMove( cmd )
-
 	if ( self.TauntCam:CreateMove( cmd, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
 end
 
 --
 -- Allow changing the player's view
 --
 function PLAYER:CalcView( view )
-
 	if ( self.TauntCam:CalcView( view, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
 
 	-- Your stuff here
-
 end
-
 
 player_manager.RegisterClass( "player_lobby", PLAYER, "player_default" )

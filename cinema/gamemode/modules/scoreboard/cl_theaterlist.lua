@@ -7,20 +7,17 @@ THEATERLIST.TitleHeight = 56
 THEATERLIST.TheaterHeight = 56
 
 function THEATERLIST:Init()
-
 	self.Title = Label( T'TheaterList_NowShowing', self )
 	self.Title:SetFont( "ScoreboardTitleSmall" )
 	self.Title:SetColor( Color( 255, 255, 255 ) )
 
 	self.Theaters = {}
 	self.NextUpdate = 0.0
-
 end
 
 local Background = Material( "theater/nowshowing256.png" )
 
 function THEATERLIST:Paint( w, h )
-
 	//Render the background
 	surface.SetDrawColor( 123, 32, 29, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
@@ -29,28 +26,23 @@ function THEATERLIST:Paint( w, h )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, 0, self:GetWide(), 680 )
-
 end
 
 function THEATERLIST:AddTheater( th )
-	
 	if self.Theaters[ th ] then return end
 
 	local panel = vgui.Create( "ScoreboardTheater", self )
 	panel:SetTheater( th )
 	panel:SetVisible( true )
-	
+
 	self.Theaters[ th ] = panel
-	
 end
 
 function THEATERLIST:RemoveTheater( th )
-
 	if ValidPanel( self.Theaters[ th ] ) then
 		self.Theaters[ th ]:Remove()
 		self.Theaters[ th ] = nil
 	end
-
 end
 
 function THEATERLIST:Update()
@@ -58,10 +50,9 @@ function THEATERLIST:Update()
 end
 
 function THEATERLIST:UpdateList()
-
 	local ids = {}
-	
-	for _, th in pairs( theater.GetTheaters() ) do 
+
+	for _, th in pairs( theater.GetTheaters() ) do
 		self:AddTheater( th:GetLocation() )
 		table.insert(ids, th:GetLocation() )
 	end
@@ -71,11 +62,9 @@ function THEATERLIST:UpdateList()
 			self:RemoveTheater( k )
 		end
 	end
-
 end
 
 function THEATERLIST:Think()
-
 	if RealTime() > self.NextUpdate then
 		self:Update()
 		self:InvalidateLayout()
@@ -87,13 +76,11 @@ function THEATERLIST:Think()
 
 		self.NextUpdate = RealTime() + 1.0
 	end
-
 end
 
 function THEATERLIST:PerformLayout()
-
 	local TheatersSorted = {}
-		
+
 	for _, panel in pairs( self.Theaters ) do
 		local th = {}
 		th.Panel = panel
@@ -110,13 +97,11 @@ function THEATERLIST:PerformLayout()
 	local curY = self.TitleHeight
 
 	for _, th in pairs( TheatersSorted ) do
-
 		th.Panel:InvalidateLayout( true )
 		th.Panel:SetPos( 0, curY )
 		th.Panel:SetWide( self:GetWide() )
 
 		curY = curY + self.TheaterHeight + 2
-
 	end
 
 	self:SetTall( curY )
@@ -128,18 +113,15 @@ function THEATERLIST:PerformLayout()
 	if self.Title:GetWide() > self:GetWide() and self.Title:GetFont() != "ScoreboardTitleSmaller" then
 		self.Title:SetFont( "ScoreboardTitleSmaller" )
 	end
-
 end
 
 vgui.Register( "ScoreboardTheaterList", THEATERLIST )
-
 
 
 THEATER = {}
 THEATER.Padding = 16
 
 function THEATER:Init()
-
 	self.TheaterId = -1
 
 	self:SetTall( THEATERLIST.TheaterHeight )
@@ -155,22 +137,18 @@ function THEATER:Init()
 	self.Video = Label( "cute cats xD", self )
 	self.Video:SetFont( "ScoreboardTheaterVideo" )
 	self.Video:SetColor( Color( 255, 255, 255 ) )
-
 end
 
 function THEATER:Paint( w, h )
-
 end
 
 function THEATER:Update()
-
 	local Theater = theater.GetByLocation(self.TheaterId)
 	if !Theater then return end
 
 	self.Title:SetText( string.upper( Theater:Name() ) )
 	self.Time:SetText( Theater:VideoTime() )
 	self.Video:SetText( T( Theater:VideoTitle() ) )
-
 end
 
 function THEATER:SetTheater( th )
@@ -178,10 +156,10 @@ function THEATER:SetTheater( th )
 	self:Update()
 end
 
-function THEATER:Think() end
+function THEATER:Think()
+end
 
 function THEATER:PerformLayout()
-
 	self.Title:SizeToContents()
 	local w = math.Clamp(self.Title:GetWide(), 0, 140)
 	self.Title:SetSize(w, self.Title:GetTall())
@@ -198,7 +176,6 @@ function THEATER:PerformLayout()
 
 	self.Video:AlignLeft( self.Padding )
 	self.Video:AlignTop( self.Title:GetTall() - 5 )
-
 end
 
 vgui.Register( "ScoreboardTheater", THEATER )

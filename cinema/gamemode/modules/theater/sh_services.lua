@@ -3,7 +3,6 @@ module( "theater", package.seeall )
 Services = {}
 
 function RegisterService( class, object, base )
-
 	if !class or !object then return end
 	if !base then base = "base" end
 
@@ -16,13 +15,10 @@ function RegisterService( class, object, base )
 		if class == "base" then return end
 		setmetatable( Services[ class ], { __index = Services[ base ] } )
 	end
-
 end
 
 function GetServiceByClass( class )
-
 	return Services [ class ]
-
 end
 
 -- Load the base service before anything else

@@ -1,5 +1,4 @@
-Location.Add( "theater_nexmultiplex_1m",
-{
+Location.Add( "theater_nexmultiplex_1m", {
 	/*
 		Main Lobby
 	*/
@@ -208,20 +207,16 @@ Location.Add( "theater_nexmultiplex_1m",
 		Min = Vector( 2117.3698730469, 211.97885131836, -21.230167388916 ),
 		Max = Vector( 2440.1611328125, 1333.1423339844, 374.72283935547 ),
 	},
-
 } )
 
 -- Give players who enter the Parking Lot a crowbar
 hook.Add( "PlayerChangeLocation", "GivePlayerCrowbar", function( ply, loc, old )
-
 	if !IsValid(ply) then return end
 
 	local bHasCrowbar = ply:HasWeapon( "weapon_crowbar" )
-	
 	if ply:GetLocationName() == "Parking Lot" and !bHasCrowbar then
 		ply:Give( "weapon_crowbar" )
 	elseif bHasCrowbar then
 		ply:StripWeapon( "weapon_crowbar" )
 	end
-
 end )

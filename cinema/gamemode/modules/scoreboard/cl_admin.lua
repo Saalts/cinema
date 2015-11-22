@@ -7,7 +7,6 @@ ADMIN.TitleHeight = 64
 ADMIN.VidHeight = 32 // 48
 
 function ADMIN:Init()
-
 	local Theater = LocalPlayer():GetTheater()
 
 	self:SetZPos( 1 )
@@ -38,21 +37,18 @@ function ADMIN:Init()
 	local SeekButton = vgui.Create( "TheaterButton" )
 	SeekButton:SetText( T'Theater_Seek' )
 	SeekButton.DoClick = function(self)
-
-		Derma_StringRequest( T'Theater_Seek', 
-			T'Theater_SeekQuery', 
+		Derma_StringRequest( T'Theater_Seek',
+			T'Theater_SeekQuery',
 			"0",
 			function( strTextOut ) RunConsoleCommand( "cinema_seek", strTextOut ) end,
 			function( strTextOut ) end,
-			T'Theater_Seek', 
+			T'Theater_Seek',
 			T'Cancel' )
-
 	end
 	self.Options:AddItem(SeekButton)
 
 	-- Admin-only options
 	if LocalPlayer():IsAdmin() then
-		
 		-- Reset the theater
 		local ResetButton = vgui.Create( "TheaterButton" )
 		ResetButton:SetText( T'Theater_Reset' )
@@ -60,16 +56,14 @@ function ADMIN:Init()
 			RunConsoleCommand( "cinema_reset" )
 		end
 		self.Options:AddItem(ResetButton)
-
 	end
 
 	-- Private theater options
 	if Theater and Theater:IsPrivate() then
-
 		local NameButton = vgui.Create( "TheaterButton" )
 		NameButton:SetText( T'Theater_ChangeName' )
 		NameButton.DoClick = function(self)
-			Derma_StringRequest( T'Theater_ChangeName', 
+			Derma_StringRequest( T'Theater_ChangeName',
 				"",
 				Theater:Name(),
 				function( strTextOut ) RunConsoleCommand( "cinema_name", strTextOut ) end,
@@ -85,13 +79,10 @@ function ADMIN:Init()
 			RunConsoleCommand( "cinema_lock" )
 		end
 		self.Options:AddItem(LockButton)
-
 	end
-
 end
 
 function ADMIN:Update()
-
 	local Theater = LocalPlayer():GetTheater() // get player's theater from their location
 	if !Theater then return end
 
@@ -101,23 +92,19 @@ function ADMIN:Update()
 	elseif LocalPlayer():IsAdmin() then
 		self.Title:SetText( T'Theater_Admin' )
 	end
-
 end
 
 function ADMIN:Think()
-
 	if RealTime() > self.NextUpdate then
 		self:Update()
 		self:InvalidateLayout()
 		self.NextUpdate = RealTime() + 3.0
 	end
-
 end
 
 local Background = Material( "theater/banner.png" )
 
 function ADMIN:Paint( w, h )
-
 	// Background
 	surface.SetDrawColor( 26, 30, 38, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
@@ -130,11 +117,9 @@ function ADMIN:Paint( w, h )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, -1, 512, self.Title:GetTall() + 1 )
-
 end
 
 function ADMIN:PerformLayout()
-
 	self.Title:SizeToContents()
 	self.Title:SetTall( self.TitleHeight )
 	self.Title:CenterHorizontal()
@@ -145,7 +130,6 @@ function ADMIN:PerformLayout()
 
 	self.Options:Dock( FILL )
 	self.Options:SizeToContents()
-
 end
 
 vgui.Register( "ScoreboardAdmin", ADMIN )

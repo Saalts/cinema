@@ -34,10 +34,8 @@ local RenderScale = 0.2
 local AngleOffset = Angle(0,90,90)
 
 function ENT:DrawTranslucent()
-	
 	-- Find attachment
 	if !self.Attach then
-
 		local attachId = self:LookupAttachment("thumb3d2d")
 		self.Attach = self:GetAttachment(attachId)
 
@@ -46,7 +44,6 @@ function ENT:DrawTranslucent()
 		else
 			return
 		end
-
 	end
 
 	cam.Start3D2D( self.Attach.Pos, self.Attach.Ang, RenderScale )
@@ -54,14 +51,12 @@ function ENT:DrawTranslucent()
 	cam.End3D2D()
 
 	pcall( self.DrawText, self )
-	
 end
 
 local hangs = { "p", "g", "y", "q", "j" }
 
 local tw, th, ty, scale, bw, bh, by = nil
 function ENT:DrawSubtitle( str, height )
-
 	surface.SetFont( "TheaterInfoMedium" )
 
 	-- Get text dimensions
@@ -78,7 +73,7 @@ function ENT:DrawSubtitle( str, height )
 	-- Calculate subtitle bar dimensions
 	bw, bh = (ThumbWidth * scale), (ThumbHeight * scale) * 0.16
 	bh = math.max( bh, th )
-	
+
 	-- Calculate height offset for bar
 	by = height * scale
 	by = math.min( by, (ThumbHeight * scale) - bh )
@@ -92,7 +87,6 @@ function ENT:DrawSubtitle( str, height )
 		surface.DrawRect( 0, by, bw, bh )
 		draw.TheaterText( str, "TheaterInfoMedium", (ThumbWidth * scale) / 2, ty, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 	cam.End3D2D()
-
 end
 
 local name, title
@@ -100,7 +94,6 @@ local CurrentName, CurrentTitle
 local TranslatedName, TranslatedTitle
 
 function ENT:DrawText()
-
 	name = self:GetTheaterName()
 	title = self:GetTitle()
 
@@ -127,7 +120,6 @@ function ENT:DrawText()
 
 	-- Draw title
 	self:DrawSubtitle( TranslatedTitle, 303 )
-
 end
 
 local DefaultThumbnail = Material( "theater/static.vmt" )
@@ -139,18 +131,14 @@ function ENT:OnRemoveHTML()
 end
 
 function ENT:DrawThumbnail()
-
 	-- Thumbnail isn't set yet
 	if self:GetThumbnail() == "" then
-		
 		surface.SetDrawColor( 80, 80, 80 )
 		surface.SetMaterial( DefaultThumbnail )
 		surface.DrawTexturedRect( 0, 0, ThumbWidth - 1, ThumbHeight - 1 )
 
 		return
-
 	else -- Thumbnail is valid
-		
 		-- URL has changed
 		if (!self.LastURL or self.LastURL != self:GetThumbnail()) then
 
@@ -161,9 +149,7 @@ function ENT:DrawThumbnail()
 
 			self.LastURL = self:GetThumbnail()
 			self.ThumbMat = nil
-
 		elseif self.LastURL and !self.ThumbMat then
-			
 			if !ValidPanel( self.HTML ) then
 
 				-- Create HTML panel to load thumbnail
@@ -173,13 +159,11 @@ function ENT:DrawThumbnail()
 				self.HTML:SetKeyBoardInputEnabled(false)
 				self.HTML:SetMouseInputEnabled(false)
 				self.HTML:OpenURL( self:GetThumbnail() )
-			
+
 				Msg("AWESOMIUM: Initialized instance for video thumbnail: ")
 				Msg(self:GetThumbnail())
 				Msg("\n")
-
 			elseif !self.HTML:IsLoading() and !self.JSDelay then
-
 				-- Force thumbnail sizes
 				self.HTML:RunJavascript( [[
 					var nodes = document.getElementsByTagName('img');
@@ -193,7 +177,6 @@ function ENT:DrawThumbnail()
 
 				-- Add delay to wait for JS to run
 				timer.Simple(0.1, function()
-
 					if !IsValid(self) then return end
 					if !ValidPanel(self.HTML) then return end
 
@@ -219,20 +202,15 @@ function ENT:DrawThumbnail()
 					self:OnRemoveHTML()
 					self.HTML:Remove()
 					self.JSDelay = nil
-
 				end)
-
 			else
 				return -- Waiting for download to finish
 			end
-
 		end
-
 	end
 
 	-- Draw the HTML material
 	surface.SetDrawColor( 255, 255, 255 )
 	surface.SetMaterial( self.ThumbMat )
 	surface.DrawTexturedRect( 0, 0, self.w - 1, self.h - 1 )
-
 end

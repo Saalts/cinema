@@ -1,9 +1,9 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
+--[[   _
+	( )
+   _| |   __   _ __   ___ ___     _ _
  /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
 ( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
+`\__,_)`\____)(_)   (_) (_) (_)`\__,_)
 
 	DHTML
 
@@ -44,7 +44,6 @@ AccessorFunc( PANEL, "m_bAllowLua", 			"AllowLua", 		FORCE_BOOL )
 
 -----------------------------------------------------------]]
 function PANEL:Init()
-
 	self.History = {}
 	self.CurrentPage = 0
 
@@ -65,13 +64,12 @@ function PANEL:Init()
 			self:ConsoleMessage( param, func )
 		end )
 	end
-	
+
 	self:AddFunction( "gmod", "getUrl", function( href )
 		self:SetURL( href )
 	end )
 
 	self:AddFunction( "gmod", "detectFlash", function( detected )
-
 		-- Only display flash warning once
 		if FLASH_WARNING_SHOWN then return end
 
@@ -87,21 +85,17 @@ function PANEL:Init()
 		end
 
 		FLASH_WARNING_SHOWN = true
-
 	end )
 
 	self:AddFunction( "window", "open", function()
 		-- prevents popups from opening
 	end)
-
 end
 
 function PANEL:SetupCallbacks()
-
 end
 
 function PANEL:Think()
-
 	-- Poll page for URL change
 	if not self._nextUrlPoll or self._nextUrlPoll < RealTime() then
 		self:FetchPageURL()
@@ -109,7 +103,6 @@ function PANEL:Think()
 	end
 
 	if self:IsLoading() then
-
 		-- Call started loading
 		if not self._loading then
 
@@ -124,14 +117,10 @@ function PANEL:Think()
 
 			self._loading = true
 			self:OnStartLoading()
-			
 		end
-
 	else
-
 		-- Call finished loading
 		if self._loading then
-
 			self:FetchPageURL()
 
 			-- Hack to add window object callbacks
@@ -146,7 +135,6 @@ function PANEL:Think()
 
 			self._loading = nil
 			self:OnFinishLoading()
-
 		end
 
 		-- Run queued javascript
@@ -156,9 +144,7 @@ function PANEL:Think()
 			end
 			self.JS = nil
 		end
-
 	end
-
 end
 
 function PANEL:FetchPageURL()
@@ -167,7 +153,6 @@ function PANEL:FetchPageURL()
 end
 
 function PANEL:OpenURL( url, ignoreHistory )
-
 	if not ignoreHistory then
 		-- Pop URLs from the stack
 		while #self.History ~= self.CurrentPage do
@@ -180,7 +165,6 @@ function PANEL:OpenURL( url, ignoreHistory )
 	self:SetURL( url )
 
 	BaseClass.OpenURL( self, url )
-
 end
 
 function PANEL:GetURL()
@@ -198,7 +182,6 @@ function PANEL:SetURL( url )
 end
 
 function PANEL:OnURLChanged( new, old )
-
 end
 
 --[[---------------------------------------------------------
@@ -209,18 +192,15 @@ end
 -- Called when the page begins loading
 --
 function PANEL:OnStartLoading()
-
 end
 
 --
 -- Called when the page finishes loading all assets
 --
 function PANEL:OnFinishLoading()
-
 end
 
 function PANEL:QueueJavascript( js )
-
 	--
 	-- Can skip using the queue if there's nothing else in it
 	--
@@ -232,25 +212,22 @@ function PANEL:QueueJavascript( js )
 
 	table.insert( self.JS, js )
 	self:Think();
-
 end
 
 PANEL.QueueJavaScript = PANEL.QueueJavascript
 PANEL.Call = PANEL.QueueJavascript
 
 function PANEL:ConsoleMessage( msg, func )
-
 	if ( !isstring( msg ) ) then msg = "*js variable*" end
 
 	if ( self.m_bAllowLua && msg:StartWith( "RUNLUA:" ) ) then
-	
+
 		local strLua = msg:sub( 8 )
 
 		SELF = self
 		RunString( strLua )
 		SELF = nil
-		return; 
-
+		return;
 	end
 
 	-- Filter messages output to the console
@@ -269,8 +246,7 @@ function PANEL:ConsoleMessage( msg, func )
 	prefix = prefix .. "] "
 
 	MsgC( prefixColor, prefix )
-	MsgC( ConsoleColors.text, msg, "\n" )	
-
+	MsgC( ConsoleColors.text, msg, "\n" )
 end
 
 local JSObjects = {
@@ -283,7 +259,6 @@ local JSObjects = {
 -- Called by the engine when a callback function is called
 --
 function PANEL:OnCallback( obj, func, args )
-
 	-- Hack for adding window callbacks
 	obj = JSObjects[obj] or obj
 
@@ -297,14 +272,12 @@ function PANEL:OnCallback( obj, func, args )
 	if ( f ) then
 		return f( unpack( args ) )
 	end
-
 end
 
 --
 -- Add a function to Javascript
 --
 function PANEL:AddFunction( obj, funcname, func )
-
 	if obj == "this" then
 		obj = "window"
 	end
@@ -326,15 +299,12 @@ function PANEL:AddFunction( obj, funcname, func )
 	-- Store the function so OnCallback can find it and call it
 	--
 	self.Callbacks[ obj ][ funcname ] = func;
-
 end
 
 function PANEL:OpeningURL( url )
-	
 end
 
 function PANEL:FinishedURL( url )
-	
 end
 
 derma.DefineControl( "TheaterHTML", "Extended DHTML control", PANEL, "Awesomium" )

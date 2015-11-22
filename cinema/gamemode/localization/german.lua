@@ -92,4 +92,3 @@ LANG.Settings_MuteFocusTooltip		= "Theater Audio stummschalten während Garrysmo
 LANG.Service_EmbedDisabled			= "Das angeforderte Video hat die Einbettung deaktiviert."
 LANG.Service_PurchasableContent		= "Das angeforderte Video ist kaufbar und kann somit nicht abgespielt werden."
 LANG.Service_StreamOffline 			= "Der angeforderte Stream ist offline."
-

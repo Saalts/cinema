@@ -23,11 +23,9 @@ function GetTheaters()
 end
 
 function GetByLocation( locId, setup )
-
 	local Theater = Theaters[locId]
 
 	if SERVER and !Theater and setup then
-
 		local loc = Location.GetLocationByIndex( locId )
 
 		-- Theater defined in location code
@@ -35,7 +33,6 @@ function GetByLocation( locId, setup )
 
 		-- Attempt to find theater_screen entity within location
 		if !info then
-
 			local screen = nil
 			local entities = ents.FindInBox( loc.Min, loc.Max )
 
@@ -49,7 +46,6 @@ function GetByLocation( locId, setup )
 
 			-- Found screen entity
 			if IsValid(screen) then
-				
 				-- Cache keyvalues
 				local kv = screen.keyvalues
 
@@ -68,9 +64,7 @@ function GetByLocation( locId, setup )
 						info.ThumbEnt = target[1]
 					end
 				end
-
 			end
-
 		end
 
 		-- Valid theater info
@@ -78,11 +72,9 @@ function GetByLocation( locId, setup )
 			Theater = THEATER:Init(locId, info)
 			Theaters[locId] = Theater
 		end
-
 	end
 
 	return Theater
-
 end
 
 function GetNameByLocation( locId )
@@ -94,7 +86,6 @@ function IsVideoTimed(type)
 end
 
 local function ServiceMatch( Theater, service, data )
-
 	-- Make sure this service can be used in the theater
 	if service.TheaterType and (!Theater or Theater:GetFlags() != service.TheaterType) then
 		return
@@ -102,16 +93,12 @@ local function ServiceMatch( Theater, service, data )
 
 	-- Check if url matches
 	if service:Match( data ) then
-
 		-- Get url info
 		return service:GetURLInfo( data )
-
 	end
-
 end
 
 local function GetURLInfo( url, Theater )
-
 	-- Parse url
 	local status, data = pcall( url2.parse2, url )
 	if !status then
@@ -126,7 +113,6 @@ local function GetURLInfo( url, Theater )
 
 	-- Iterate through each service to check if the url is a valid request
 	for _, service in pairs( Services ) do
-
 		-- Ignore certain services
 		if service.Hidden then
 			continue
@@ -137,7 +123,6 @@ local function GetURLInfo( url, Theater )
 			info.Type = service:GetClass()
 			return info
 		end
-
 	end
 
 	-- Check for valid URL request
@@ -151,11 +136,9 @@ local function GetURLInfo( url, Theater )
 	end
 
 	return false
-
 end
 
 function ExtractURLData( url, Theater )
-
 	-- Parse url info
 	local status, info = pcall( GetURLInfo, url, Theater )
 	if !status then
@@ -164,7 +147,6 @@ function ExtractURLData( url, Theater )
 	end
 
 	return info
-
 end
 
 function GetQueueMode()

@@ -6,10 +6,9 @@ function draw.TheaterText(text, font, x, y, colour, xalign, yalign)
 end
 
 function draw.HTMLTexture( panel, w, h )
-
 	if !panel or !ValidPanel(panel) then return end
 	if !w or !h then return end
-	
+
 	panel:UpdateHTMLTexture()
 
 	local pw, ph = panel:GetSize()
@@ -25,5 +24,4 @@ function draw.HTMLTexture( panel, w, h )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( panel:GetHTMLMaterial() )
 	surface.DrawTexturedRect( 0, 0, w * pw, h * ph )
-
 end

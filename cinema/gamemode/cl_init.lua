@@ -8,13 +8,10 @@ include( 'shared.lua' )
 	Unsupported Notifications
 ]]
 hook.Add( "InitPostEntity", "CheckMapSupport", function()
-
 	if Location then
-
 		hook.Run( "CinemaRegisterMap", Location )
 
 		if not Location.GetLocations() then
-			
 			warning.Set(
 				T'Warning_Unsupported_Line1',
 				T'Warning_Unsupported_Line2'
@@ -25,11 +22,8 @@ hook.Add( "InitPostEntity", "CheckMapSupport", function()
 					steamworks.ViewFile( 119060917 )
 				end
 			end )
-
 		end
-
 	elseif system.IsOSX() then
-
 		warning.Set(
 			T'Warning_OSX_Line1',
 			T'Warning_OSX_Line2'
@@ -41,11 +35,9 @@ hook.Add( "InitPostEntity", "CheckMapSupport", function()
 				warning.Clear()
 			end
 		end )
-
 	else
 		warning.Clear()
 	end
-
 end )
 
 /*
@@ -66,23 +58,18 @@ GM.HUDToHide = {
    Desc: return true if we should draw the named element
 -----------------------------------------------------------]]
 function GM:HUDShouldDraw( name )
-
 	-- Allow the weapon to override this
 	local ply = LocalPlayer()
 	if ( IsValid( ply ) ) then
-	
+
 		local wep = ply:GetActiveWeapon()
-		
+
 		if (wep && wep:IsValid() && wep.HUDShouldDraw != nil) then
-		
 			return wep.HUDShouldDraw( wep, name )
-			
 		end
-		
 	end
 
 	return !table.HasValue(self.HUDToHide, name)
-
 end
 
 --[[---------------------------------------------------------
@@ -90,11 +77,9 @@ end
    Desc: Use this section to paint your HUD
 -----------------------------------------------------------]]
 function GM:HUDPaint()
-
 	hook.Run( "HUDDrawTargetID" )
 	-- hook.Run( "HUDDrawPickupHistory" )
 	hook.Run( "DrawDeathNotice", 0.85, 0.04 )
-
 end
 
 --[[---------------------------------------------------------
@@ -110,10 +95,9 @@ end
    Allows override of the default view
 -----------------------------------------------------------]]
 function GM:CalcView( ply, origin, angles, fov, znear, zfar )
-	
 	local Vehicle	= ply:GetVehicle()
 	local Weapon	= ply:GetActiveWeapon()
-	
+
 	local view = {}
 	view.origin 		= origin
 	view.angles			= angles
@@ -131,30 +115,27 @@ function GM:CalcView( ply, origin, angles, fov, znear, zfar )
 	-- Let drive possibly alter the view
 	--
 	if ( drive.CalcView( ply, view ) ) then return view end
-	
+
 	--
 	-- Give the player manager a turn at altering the view
 	--
 	player_manager.RunClass( ply, "CalcView", view )
 
 	-- Give the active weapon a go at changing the viewmodel position
-	
+
 	if ( IsValid( Weapon ) ) then
-	
 		local func = Weapon.GetViewModelPosition
 		if ( func ) then
 			view.vm_origin,  view.vm_angles = func( Weapon, origin*1, angles*1 ) -- Note: *1 to copy the object so the child function can't edit it.
 		end
-		
+
 		local func = Weapon.CalcView
 		if ( func ) then
 			view.origin, view.angles, view.fov = func( Weapon, ply, origin*1, angles*1, fov ) -- Note: *1 to copy the object so the child function can't edit it.
 		end
-	
 	end
-	
+
 	return view
-	
 end
 
 --
@@ -168,7 +149,7 @@ end
 
 --[[---------------------------------------------------------
    Name: gamemode:CreateMove( command )
-   Desc: Allows the client to change the move commands 
+   Desc: Allows the client to change the move commands
 			before it's send to the server
 -----------------------------------------------------------]]
 function GM:CreateMove( cmd )

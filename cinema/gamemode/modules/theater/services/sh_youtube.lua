@@ -60,7 +60,6 @@ local function convertISO8601Time( duration )
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 
 	-- http://www.youtube.com/watch?v=(videoId)
@@ -80,7 +79,6 @@ function SERVICE:GetURLInfo( url )
 
 	-- Start time, #t=123s or ?t=123s
 	if (url.fragment and url.fragment.t) or (url.query and url.query.t) then
-
 		local time = (url.fragment and url.fragment.t) and url.fragment.t or url.query.t
 
 		local seconds = tonumber(string.match(time, "(%d+)s"))
@@ -95,7 +93,7 @@ function SERVICE:GetURLInfo( url )
 			time = tonumber(time) and time or 0
 			time = time + (minutes * 60)
 		end
-		
+
 		if hours then
 			time = tonumber(time) and time or 0
 			time = time + (hours * 60 * 60)
@@ -104,7 +102,6 @@ function SERVICE:GetURLInfo( url )
 		if time then
 			info.StartTime = time
 		end
-
 	end
 
 	if info.Data then
@@ -112,11 +109,9 @@ function SERVICE:GetURLInfo( url )
 	else
 		return false
 	end
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local onReceive = function( body, length, headers, code )
 		local resp = util.JSONToTable( body )
 		if not resp then
@@ -126,17 +121,16 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if resp.error then
 			return onFailure( 'Theater_RequestFailed' )
 		end
-		
+
 		if table.Lookup( resp, 'pageInfo.totalResults', 0 ) <= 0 then
 			return onFailure( 'Theater_RequestFailed' )
 		end
-		
-		local item = resp.items[1]
 
+		local item = resp.items[1]
 		if not table.Lookup( item, 'status.embeddable' ) then
 			return onFailure( 'Service_EmbedDisabled' )
 		end
-		
+
 		local info = {}
 		info.title = table.Lookup( item, 'snippet.title' )
 
@@ -144,7 +138,6 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		info.thumbnail = table.Lookup( item, 'snippet.thumbnails.medium.url' )
 
 		local isLive = ( table.Lookup( item, 'snippet.liveBroadcastContent' ) ~= 'none' )
-
 		if isLive then
 			info.type = 'youtubelive'
 			info.duration = 0
@@ -156,12 +149,10 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	local url = METADATA_URL:format( data )
 	self:Fetch( url, onReceive, onFailure )
-
 end
 
 theater.RegisterService( 'youtube', SERVICE )

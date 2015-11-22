@@ -1,25 +1,19 @@
-
-
-
 function string.hash( str )
-	
-	local bytes = {string.byte( str, 0, string.len( str ) )}
+	local bytes = { string.byte( str, 0, string.len( str ) ) }
 	local hash = 0
-	
-	//0x07FFFFFF
-	//It is a sequrence of 31 "1".
-	//If it was a sequence of 32 "1", it would not be able to send over network as a positive number
-	//Now it must be 27 "1", because DTVarInt hates 31... Do not ask why...
+
+	// 0x07FFFFFF
+	// It is a sequrence of 31 "1".
+	// If it was a sequence of 32 "1", it would not be able to send over network as a positive number
+	// Now it must be 27 "1", because DTVarInt hates 31... Do not ask why...
 	for _, v in ipairs( bytes ) do
 		hash = math.fmod( v + ((hash*32) - hash ), 0x07FFFFFF )
 	end
-	
+
 	return hash
-	
 end
 
 function string.FormatSeconds(sec)
-
 	local hours = math.floor(sec / 3600)
 	local minutes = math.floor((sec % 3600) / 60)
 	local seconds = sec % 60
@@ -37,11 +31,9 @@ function string.FormatSeconds(sec)
 	else
 		return string.format("%s:%s", minutes, seconds)
 	end
-
 end
 
 function string.reduce( str, font, width )
-
 	surface.SetFont( font )
 
 	local tw, th = surface.GetTextSize(str)
@@ -51,11 +43,9 @@ function string.reduce( str, font, width )
 	end
 
 	return str
-
 end
 
 function string.findFromTable( str, tbl )
-
 	for _, v in pairs( tbl ) do
 		if string.find( str, v ) then
 			return true
@@ -63,5 +53,4 @@ function string.findFromTable( str, tbl )
 	end
 
 	return false
-
 end

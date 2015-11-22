@@ -1,4 +1,3 @@
-
 surface.CreateFont( "ScoreboardHelp", { font = "Open Sans Condensed Light", size = 20, weight = 100 } )
 surface.CreateFont( "ScoreboardHelpSmall", { font = "Open Sans Condensed Light", size = 18, weight = 100 } )
 
@@ -6,7 +5,6 @@ SETTINGS = {}
 SETTINGS.TitleHeight = 88
 
 function SETTINGS:Init()
-
 	self.Title = Label( T'Settings_Title', self )
 	self.Title:SetFont( "ScoreboardTitleSmall" )
 	self.Title:SetColor( Color( 255, 255, 255 ) )
@@ -18,11 +16,9 @@ function SETTINGS:Init()
 	self.Settings = {}
 
 	self:Create()
-
 end
 
 function SETTINGS:NewSetting( control, text, convar )
-
 	local Control = vgui.Create( control, self )
 	Control:SetText( text or "" )
 	Control:SetWidth( 300 )
@@ -34,15 +30,13 @@ function SETTINGS:NewSetting( control, text, convar )
 	if !table.HasValue( self.Settings, Control ) then
 		table.insert( self.Settings, Control )
 	end
-	
+
 	return Control
-	
 end
 
 local Background = Material( "theater/settingsbright.png" )
 
 function SETTINGS:Paint( w, h )
-
 	//Render the background
 	surface.SetDrawColor( 62, 16, 15, 255 )
 	surface.DrawRect( 0, 0, self:GetWide(), self:GetTall() )
@@ -51,29 +45,23 @@ function SETTINGS:Paint( w, h )
 	surface.SetDrawColor( 255, 255, 255, 255 )
 	surface.SetMaterial( Background )
 	surface.DrawTexturedRect( 0, self:GetTall() - 680, 256, 680 )
-
 end
 
 function SETTINGS:Think()
-
 	if ValidPanel( Gui ) then
 		self.Help:SetVisible( !Gui.MouseEnabled )
 	end
-
 end
 
 function SETTINGS:PerformLayout()
-
 	local curY = self.TitleHeight + 40
 
 	for _, panel in pairs( self.Settings ) do
-
 		panel:InvalidateLayout()
 		curY = curY + 28
 
 		-- Resize label if needed for localization
 		if ValidPanel( panel.Label ) and panel.Label:GetFont() != "ScoreboardHelpSmall" then
-			
 			local px, py = panel:GetPos()
 
 			local x, y = panel.Label:GetPos()
@@ -83,9 +71,7 @@ function SETTINGS:PerformLayout()
 				panel.Label:SetFont( "ScoreboardHelpSmall" )
 				panel.Label:SizeToContents()
 			end
-
 		end
-
 	end
 
 	self:SetTall( curY )
@@ -101,11 +87,9 @@ function SETTINGS:PerformLayout()
 	if self.Help:GetWide() > self:GetWide() and self.Help:GetFont() != "ScoreboardHelpSmall" then
 		self.Help:SetFont( "ScoreboardHelpSmall" )
 	end
-
 end
 
 function SETTINGS:Create()
-
 	-- Volume slider
 	local Volume = self:NewSetting( "TheaterNumSlider", T'Volume', "cinema_volume" )
 	Volume:SetTooltip( T'Settings_VolumeTooltip' )
@@ -154,7 +138,6 @@ function SETTINGS:Create()
 	for idx, lang in pairs( translations.GetLanguages() ) do
 		LanguageSelect:AddLanguage( lang, CurrentLanguage == lang.Id )
 	end
-
 end
 
 vgui.Register( "ScoreboardSettings", SETTINGS )

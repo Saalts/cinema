@@ -8,18 +8,14 @@ function SERVICE:Match( url )
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 	info.Data = string.match(url.path, "/(%d+)")
 
 	return info
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local onReceive = function( body, length, headers, code )
-
 		local json = util.JSONToTable(body)
 
 		if !json[1] then
@@ -34,12 +30,10 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	local url = string.format( "http://vimeo.com/api/v2/video/%s.json", data )
 	self:Fetch( url, onReceive, onFailure )
-
 end
 
 theater.RegisterService( 'vimeo', SERVICE )

@@ -10,23 +10,18 @@ local DurationPattern = "Duration: <span>(.-) min</span>"
 local ThumbnailPattern = '<img height="%d-" width="%d-" title=".-" alt=".-" src="(.-)" />'
 
 function SERVICE:Match( url )
-	return string.match( url.host, "viooz%.%a+" ) and
-		string.match( url.path, DataPattern )
+	return string.match( url.host, "viooz%.%a+" ) and string.match( url.path, DataPattern )
 end
 
 function SERVICE:GetURLInfo( url )
-
 	local info = {}
 	info.Data = string.match( url.path, DataPattern )
 
 	return info.Data and info or false
-
 end
 
 function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
-
 	local onReceive = function( body, length, headers, code )
-
 		local info = {}
 		info.title = string.match( body, TitlePattern ) or "(Unknown)"
 		info.duration = string.match( body, DurationPattern )
@@ -44,18 +39,15 @@ function SERVICE:GetVideoInfo( data, onSuccess, onFailure )
 		if onSuccess then
 			pcall(onSuccess, info)
 		end
-
 	end
 
 	local url = string.format( UrlPattern, data )
 	self:Fetch( url, onReceive, onFailure )
-
 end
 
 theater.RegisterService( 'viooz', SERVICE )
 
 if CLIENT then
-
 	local JS_AddTheaterScript = [[
 var script = document.createElement('script');
 script.src = '%s';
@@ -70,7 +62,6 @@ function onTheaterReady() {
 ]]
 
 	function SERVICE:LoadVideo( Video, panel )
-
 		local theaterJsUrl = string.format( "%s/js/theater.min.js",
 			GetConVarString("cinema_url") or
 			"http://pixeltailgames.github.io/cinema/" )
@@ -91,11 +82,8 @@ function onTheaterReady() {
 			self:RunJavascript(str)
 
 			-- Inject theater.js
-			str = string.format( JS_AddTheaterScript, 
-				string.JavascriptSafe(theaterJsUrl) ) 
+			str = string.format( JS_AddTheaterScript, string.JavascriptSafe(theaterJsUrl) )
 			self:RunJavascript(str)
 		end
-
 	end
-
 end

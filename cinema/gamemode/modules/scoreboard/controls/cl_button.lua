@@ -1,12 +1,12 @@
---[[   _                                
-	( )                               
-   _| |   __   _ __   ___ ___     _ _ 
+--[[   _
+	( )
+   _| |   __   _ __   ___ ___     _ _
  /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
 ( (_| |(  ___/| |   | ( ) ( ) |( (_| |
-`\__,_)`\____)(_)   (_) (_) (_)`\__,_) 
+`\__,_)`\____)(_)   (_) (_) (_)`\__,_)
 
 	DButton
-	
+
 	Default Button
 
 --]]
@@ -25,7 +25,6 @@ PANEL.TextColor = Color( 255, 255, 255 )
 
 -----------------------------------------------------------]]
 function PANEL:Init()
-
 	self.BaseClass.Init(self)
 
 	self:SetTall( 28 )
@@ -35,7 +34,6 @@ end
 
 
 function PANEL:Paint( w, h )
-
 	if ( !self.m_bBackground ) then return end
 
 	if ( self.Depressed || self:IsSelected() || self:GetToggle() ) then
@@ -58,7 +56,6 @@ function PANEL:Paint( w, h )
 
 	surface.SetDrawColor( self.BackgroundColor )
 	surface.DrawRect( 0, 0, w, h )
-
 end
 
 function PANEL:UpdateColours( skin )
@@ -66,10 +63,8 @@ function PANEL:UpdateColours( skin )
 end
 
 function PANEL:IsMouseOver()
-
 	local x,y = self:CursorPos()
 	return x >= 0 and y >= 0 and x <= self:GetWide() and y <= self:GetTall()
-
 end
 
 derma.DefineControl( "TheaterButton", "", PANEL, "DButton" )

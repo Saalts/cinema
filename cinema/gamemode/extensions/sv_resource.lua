@@ -1,7 +1,6 @@
 resource.ValidExtensions = { "vmt", "png", "mdl", "wav", "mp3", "ttf" }
 
 function resource.AddDirectory( directory, recursive, path )
-
 	if !directory then return end
 
 	-- Remove trailing folder '/'
@@ -22,7 +21,7 @@ function resource.AddDirectory( directory, recursive, path )
 		if v != "_svn" && v != ".svn" then
 
 			local ext = string.GetExtensionFromFilename(v)
-			
+
 			if table.HasValue( resource.ValidExtensions, ext ) then
 				local DownloadFile = string.lower( File )
 				resource.AddFile( DownloadFile )
@@ -39,5 +38,4 @@ function resource.AddDirectory( directory, recursive, path )
 		end
 
 	end
-
 end

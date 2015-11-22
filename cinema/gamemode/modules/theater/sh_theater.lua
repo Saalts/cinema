@@ -3,7 +3,6 @@ module( "theater", package.seeall )
 THEATER = {}
 
 function THEATER:Init( locId, info )
-
 	local o = {}
 
 	setmetatable( o, self )
@@ -19,7 +18,6 @@ function THEATER:Init( locId, info )
 	o._Height = info.Height or math.Round(o._Width * (9/16))
 
 	if SERVER then
-
 		-- Keep for resetting the theater
 		o._OriginalName = o._Name
 
@@ -52,16 +50,12 @@ function THEATER:Init( locId, info )
 		end
 
 		o:PlayDefault()
-
 	else
-
 		info.Title = info.Title or 'NoVideoPlaying'
 		o._Video = VIDEO:Init( info )
-
 	end
 
 	return o
-
 end
 
 function THEATER:Name()
@@ -107,13 +101,11 @@ end
 	Video
 */
 function THEATER:SetVideo( Video, PreventDefault )
-
 	if !Video then return end
 
 	self._Video = Video
 
 	if SERVER then
-
 		self._Video._VideoStart = (CurTime() - Video:StartTime()) + 1
 
 		if IsValid( self._ThumbEnt ) then
@@ -126,9 +118,7 @@ function THEATER:SetVideo( Video, PreventDefault )
 		end
 
 		self:SendVideo()
-
 	end
-
 end
 
 function THEATER:IsPlaying()
@@ -163,13 +153,11 @@ function THEATER:VideoDuration()
 end
 
 function THEATER:VideoTime()
-
 	if !self:IsPlaying() or !IsVideoTimed(self:VideoType()) then
 		return ""
 	end
 
 	return string.FormatSeconds(self:VideoCurrentTime(true)) .. " / " .. string.FormatSeconds(self:VideoDuration())
-
 end
 
 function THEATER:VideoTitle()
@@ -196,19 +184,15 @@ function THEATER:GetOwner()
 end
 
 function THEATER:Think()
-
 	if self.NextThink and self.NextThink > CurTime() then
 		return
 	end
 
 	if SERVER then
-
 		if !self:IsPlaying() and !self._Finished then
 			self:OnFinishedPlaying()
 		end
-
 	else
-
 		if LocalPlayer():GetLocation() != self:GetLocation() then return end
 
 		-- Synchronize clientside video playback
@@ -224,21 +208,15 @@ function THEATER:Think()
 				panel:QueueJavascript( str )
 
 				self.NextSync = RealTime() + 5
-
 			end
-
 		end
-
 	end
 
 	self.NextThink = CurTime() + 1
-
 end
 
 if SERVER then
-
 	function THEATER:Reset()
-
 		self._Name = self._OriginalName
 
 		self:ClearQueue()
@@ -251,14 +229,12 @@ if SERVER then
 		end
 
 		self:PlayDefault()
-
 	end
 
 	/*
 		Thumbnail Entity
 	*/
 	function THEATER:SetupThumbnailEntity( ent )
-
 		if !IsValid( self._ThumbEnt ) then
 
 			if IsValid( ent ) then
@@ -271,20 +247,16 @@ if SERVER then
 			else
 				return
 			end
-
 		end
 
 		self:SyncThumbnail()
-
 	end
 
 	function THEATER:SyncThumbnail()
-
 		if !IsValid( self._ThumbEnt ) then return end
 
 		self._ThumbEnt:SetTheaterName( self:Name() )
 		self._ThumbEnt:SetTitle( self:VideoTitle() )
-
 	end
 
 	/*
@@ -296,7 +268,6 @@ if SERVER then
 	end
 
 	function THEATER:PlayDefault()
-
 		local info = {
 			Type 		= "",
 			Data 		= "",
@@ -306,15 +277,12 @@ if SERVER then
 		}
 
 		self:SetVideo( VIDEO:Init(info), true )
-
 	end
 
 	function THEATER:NextVideo()
-
 		self:ClearSkipVotes()
 
 		if !self:IsQueueEmpty() then
-
 			local key
 			local Video
 
@@ -339,7 +307,6 @@ if SERVER then
 			end
 
 			if hook.Run( "PrePlayVideo", Video, self ) != false then
-
 				table.remove(self._Queue, key)
 
 				self:SetVideo( Video )
@@ -352,26 +319,19 @@ if SERVER then
 				end
 
 				hook.Run( "PostPlayVideo", Video, self )
-
 			end
-
 		else
-
 			self:PlayDefault()
-
 		end
-
 	end
 
 	function THEATER:RequestVideo( ply, url, force )
-
 		-- Prevent request spam
 		if IsValid(ply) and ply.LastVideoRequest and ply.LastVideoRequest + 0.3 > CurTime() then
 			return
 		end
 
 		if self:IsPrivate() then
-
 			-- Set new theater owner
 			if !IsValid( self:GetOwner() ) then
 				self:RequestOwner( ply )
@@ -381,7 +341,6 @@ if SERVER then
 			if self:IsQueueLocked() and ply != self:GetOwner() then
 				return self:AnnounceToPlayer( ply, 'Theater_OwnerLockedQueue' )
 			end
-
 		end
 
 		local info = ExtractURLData( url, self )
@@ -393,7 +352,6 @@ if SERVER then
 
 		-- Check for duplicate requests
 		for _, vid in pairs(self:GetQueue()) do
-
 			if vid:Type() == info.Type and
 				vid:Data() == info.Data then
 
@@ -404,7 +362,6 @@ if SERVER then
 
 				return
 			end
-
 		end
 
 		local service = GetServiceByClass( info.Type )
@@ -415,13 +372,11 @@ if SERVER then
 			} )
 		end
 
-
 		-- Create video object and check if the page is valid
 		local vid = VIDEO:Init(info, ply)
 		local VideoType = vid:Type()
 
 		vid:RequestInfo( function( success )
-
 			-- Revalidate video in the case its type changes
 			if success and VideoType != vid:Type() then
 				service = GetServiceByClass( vid:Type() )
@@ -430,10 +385,9 @@ if SERVER then
 					return
 				end
 			end
-		
+
 			-- Check for duplicate requests again in the case it was requested again while processing
 			for _, video in pairs(self:GetQueue()) do
-
 				if video:Type() == VideoType and
 					video:Data() == vid:Data() then
 
@@ -444,9 +398,8 @@ if SERVER then
 
 					return
 				end
-
 			end
-		
+
 			-- Failed to grab video info, etc.
 			if !success then
 				self:AnnounceToPlayer( ply, 'Theater_RequestFailed' )
@@ -479,19 +432,16 @@ if SERVER then
 
 			-- Used for logging video requests
 			hook.Run( "PostVideoQueued", vid, self )
-
 		end )
 
 		if IsValid(ply) then
 			ply.LastVideoRequest = CurTime()
 		end
-
 	end
 
 	local hhmmss = "(%d+):(%d+):(%d+)"
 	local mmss = "(%d+):(%d+)"
 	function THEATER:Seek( seconds )
-
 		if !IsVideoTimed(self:VideoType()) then return end
 
 		-- Seconds isn't a number, check HH:MM:SS
@@ -505,7 +455,7 @@ if SERVER then
 			    hr = 0
 			end
 
-			seconds = tonumber(hr) * 3600 + 
+			seconds = tonumber(hr) * 3600 +
 				tonumber(min) * 60 +
 				tonumber(sec)
 		end
@@ -521,7 +471,6 @@ if SERVER then
 		net.Start("TheaterSeek")
 			net.WriteFloat( self:VideoStartTime() )
 		net.Send(self.Players)
-
 	end
 
 	function THEATER:SendVideo( ply )
@@ -534,11 +483,9 @@ if SERVER then
 
 		-- Delay for networking latency
 		timer.Simple( 0.1, function()
-
 			if !self then return end
 
 			net.Start("TheaterVideo")
-
 				net.WriteString( self:VideoType() )
 				net.WriteString( self:VideoData() )
 				net.WriteString( self:VideoTitle() )
@@ -555,11 +502,8 @@ if SERVER then
 				if self:IsPrivate() then
 					net.WriteEntity( self:GetOwner() )
 				end
-
 			net.Send(ply or self.Players) -- sent to specific player if specified
-
 		end )
-
 	end
 
 	/*
@@ -587,7 +531,6 @@ if SERVER then
 	end
 
 	function THEATER:VoteQueuedVideo( ply, id, positive )
-
 		if !IsValid(ply) or !id then return end
 		if GetQueueMode() != QUEUE_VOTEUPDOWN then return end
 
@@ -597,17 +540,14 @@ if SERVER then
 				break
 			end
 		end
-
 	end
 
 	function THEATER:RemoveQueuedVideo( ply, id )
-
 		id = tonumber(id)
 		if !IsValid(ply) or !id then return end
 
 		for k, vid in pairs(self._Queue) do
 			if vid.id == id then
-
 				-- Remove video if player is video owner, theater owner, or an admin
 				if (vid:GetOwner() == ply) or
 					(self:GetOwner() == ply) or -- private theater
@@ -616,12 +556,9 @@ if SERVER then
 					table.remove(self._Queue, k)
 
 				end
-
 				break
-
 			end
 		end
-
 	end
 
 	/*
@@ -636,7 +573,6 @@ if SERVER then
 	end
 
 	function THEATER:NumRequiredVoteSkips()
-
 		local ratio = math.Clamp( GetConVar("cinema_skip_ratio"):GetFloat() or 2/3, 0, 1 )
 
 		local numply = self:NumPlayers()
@@ -647,7 +583,6 @@ if SERVER then
 		else
 			return math.Round( self:NumPlayers() * ratio )
 		end
-
 	end
 
 	function THEATER:ClearSkipVotes()
@@ -668,7 +603,6 @@ if SERVER then
 	end
 
 	function THEATER:VoteSkip( ply )
-	
 		-- Can't vote skip if the queue is locked
 		if self:IsQueueLocked() then return end
 
@@ -680,13 +614,13 @@ if SERVER then
 
 		-- Ensure the player hasn't already voted
 		if self:HasPlayerVotedToSkip(ply) then return end
-		
+
 		-- Give hooks a chance to deny the voteskip
 		if hook.Run("PreVoteSkipAccept", ply, self) == false then return end
 
 		-- Insert player into list of vote skips
 		table.insert(self._SkipVotes, ply)
-		
+
 		-- Run post accept hook
 		hook.Run("PostVoteSkipAccept", ply, self)
 
@@ -699,23 +633,18 @@ if SERVER then
 
 		-- Check if the current video can be skipped
 		self:CheckVoteSkip()
-
 	end
 
 	function THEATER:CheckVoteSkip()
-
 		-- Can't skip if the queue is locked
 		if self:IsQueueLocked() then return end
 
 		-- Skip the current video if the voteskip requirement is met
 		if self:NumVoteSkips() >= self:NumRequiredVoteSkips() then
-
 			self:AnnounceToPlayers( 'Theater_Voteskipped' )
 
 			self:SkipVideo()
-
 		end
-
 	end
 
 
@@ -731,7 +660,6 @@ if SERVER then
 	end
 
 	function THEATER:AddPlayer( ply )
-
 		-- Don't bother if the player is already in the list
 		if self:HasPlayer( ply ) then return end
 
@@ -748,22 +676,20 @@ if SERVER then
 		if ply:FlashlightIsOn() then
 			ply:Flashlight(false)
 		end
-
 	end
 
 	function THEATER:RemovePlayer( ply )
-
 		-- Don't bother if the player isn't in the list
 		if !self:HasPlayer( ply ) then return end
 
 		-- Remove player from list
 		table.RemoveByValue(self.Players, ply)
-		
+
 		-- Remove player from vote skip table if they have voted
 		if self:HasPlayerVotedToSkip( ply ) then
 			table.RemoveByValue(self._SkipVotes, ply)
 		end
-		
+
 		-- Notify player of leaving the theater
 		net.Start("PlayerLeaveTheater")
 		net.Send(ply)
@@ -786,7 +712,6 @@ if SERVER then
 				self:Reset()
 			end
 		end
-
 	end
 
 	function THEATER:AnnounceToPlayers( tbl )
@@ -794,7 +719,6 @@ if SERVER then
 	end
 
 	function THEATER:AnnounceToPlayer( ply, tbl )
-
 		-- Single message without coloring
 		if isstring(tbl) then
 			tbl = { tbl }
@@ -806,7 +730,6 @@ if SERVER then
 				net.WriteTable( tbl )
 			net.Send(ply)
 		end
-
 	end
 
 	/*
@@ -818,7 +741,6 @@ if SERVER then
 	end
 
 	function THEATER:RequestOwner( ply )
-
 		if !IsValid( ply ) then return end
 		if IsValid( self:GetOwner() ) then return end
 
@@ -826,7 +748,6 @@ if SERVER then
 		self:AnnounceToPlayer( ply, 'Theater_NotifyOwnership' )
 
 		RequestTheaterInfo(ply)
-
 	end
 
 	function THEATER:IsQueueLocked()
@@ -834,7 +755,6 @@ if SERVER then
 	end
 
 	function THEATER:ToggleQueueLock( ply )
-
 		if !IsValid(ply) then return end
 
 		-- Toggle theater queue lock
@@ -845,11 +765,9 @@ if SERVER then
 			self:IsQueueLocked() and 'Theater_LockedQueue' or 'Theater_UnlockedQueue',
 			ply:Nick()
 		} )
-
 	end
 
 	function THEATER:SetName( name, ply )
-
 		if !IsValid(ply) then return end
 
 		-- Theater must be private and player must be the owner
@@ -858,7 +776,5 @@ if SERVER then
 		-- Clamp new name to 32 chars
 		self._Name = string.sub(name,0,32)
 		self:SyncThumbnail()
-
 	end
-
 end

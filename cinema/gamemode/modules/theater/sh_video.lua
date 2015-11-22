@@ -3,12 +3,11 @@ module( "theater", package.seeall )
 VIDEO = {}
 
 function VIDEO:Init( info, ply )
-
 	local o = {}
-	
+
 	setmetatable( o, self )
 	self.__index = self
-	
+
 	if SERVER then
 		o.id = -1 			-- set by theater
 		o.theaterId = -1 	-- set by theater
@@ -26,7 +25,6 @@ function VIDEO:Init( info, ply )
 		o._OwnerSteamID = info.OwnerSteamID
 	end
 
-
 	o._VideoType = info.Type or ""
 	o._VideoData = info.Data or ""
 	o._VideoStart = info.StartTime or 0
@@ -36,7 +34,6 @@ function VIDEO:Init( info, ply )
 	o._VideoThumbnail = info.Thumbnail or ""
 
 	return o
-
 end
 
 function VIDEO:Type()
@@ -87,11 +84,10 @@ function VIDEO:GetOwnerSteamID()
 end
 
 if SERVER then
-
 	function VIDEO:RequestTime()
 		return self._RequestTime
 	end
-	
+
 	/*
 		Votes
 	*/
@@ -143,43 +139,31 @@ if SERVER then
 	end
 
 	function VIDEO:AddVote( ply, positive )
-
 		if !IsValid(ply) then return end
 
 		local vote = self:GetVoteByPlayer(ply)
 
 		if vote then
-			
 			if (vote.value > 0 and positive) or (vote.value < 0 and !positive) then
 				self:RemoveVoteByPlayer(ply)
 			else
 				vote.value = positive and 1 or -1
 			end
-
 		else
-
 			table.insert(self._Votes, {
 				owner = ply,
 				value = positive and 1 or -1
 			})
-
 		end
-
 	end
 
-	/*
-		
-	*/
 	function VIDEO:RequestInfo( callback )
-
 		if !callback then return end
 
 		if self:Type() != "" then
-
 			-- Query info from local database
 			local results = GetVideoLog(self:Data(), self:Type())
 			if results != nil and istable(results) then
-
 				results = results[1]
 
 				self._VideoTitle = results.title or "(Unknown)"
@@ -187,9 +171,7 @@ if SERVER then
 				self._VideoThumbnail = results.thumbnail or ""
 
 				callback(true)
-
 			else
-
 				local function loadFailure(code)
 					if type(code) == 'string' then
 						callback(code)
@@ -214,7 +196,7 @@ if SERVER then
 
 					-- Problem grabbing duration data
 					if IsVideoTimed(self:Type()) and self._VideoDuration <= 0 then
-						return callback(false)		
+						return callback(false)
 					end
 
 					callback(true)
@@ -224,13 +206,9 @@ if SERVER then
 				if !status then
 					callback(false)
 				end
-
 			end
-
 		else
 			callback(false)
 		end
-
 	end
-
 end

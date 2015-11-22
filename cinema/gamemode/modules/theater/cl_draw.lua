@@ -37,7 +37,6 @@ h = 0
 local LoadingStr = T'Loading'
 
 function DrawActiveTheater( bDrawingDepth, bDrawingSkybox )
-
 	if input.IsKeyDown(KEY_Q) then
 		LastInfoDraw = CurTime()
 	end
@@ -45,7 +44,6 @@ function DrawActiveTheater( bDrawingDepth, bDrawingSkybox )
 	if theater.Fullscreen then return end -- Don't render twice
 
 	if !LastTheater then
-
 		local Theater = LocalPlayer().GetTheater and LocalPlayer():GetTheater() or nil
 		if !Theater then
 			LastTheater = nil
@@ -62,26 +60,22 @@ function DrawActiveTheater( bDrawingDepth, bDrawingSkybox )
 		InfoScale = w / 10300 -- 10300 seems to produce a good scale
 
 		LastTheater = Theater
-
 	end
 
 	cam.Start3D2D( Pos, Ang, 0.1 )
-
 		-- Draw 'Loading...' incase page takes too long to load
 		surface.SetDrawColor( 0, 0, 0, 255 )
 		surface.DrawRect( 0, 0, w, h )
 		draw.SimpleText( LoadingStr, "VideoInfoLarge", w / 2, h / 2, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
 
 		draw.HTMLTexture( theater.ActivePanel(), w, h )
-
 	cam.End3D2D()
 
 	if LastInfoDraw + InfoDrawDelay > CurTime() then
-		cam.Start3D2D( Pos, Ang, InfoScale )	
+		cam.Start3D2D( Pos, Ang, InfoScale )
 				pcall( theater.DrawVideoInfo, w, h, InfoScale )
 		cam.End3D2D()
 	end
-
 end
 hook.Add( "PostDrawOpaqueRenderables", "DrawTheaterScreen", DrawActiveTheater )
 
@@ -90,7 +84,6 @@ local WasFullscreen = false
 local Title = ""
 local panel
 function DrawVideoInfo( w, h, scale )
-
 	panel = ActivePanel()
 	if !ValidPanel(panel) then return end
 
@@ -156,20 +149,15 @@ function DrawVideoInfo( w, h, scale )
 		surface.SetTexture(refreshTexture)
 		surface.DrawTexturedRectRotated( 32, 128, 64, 64, RealTime() * -256 )
 	end
-
 end
 
 function DrawFullscreen()
-
 	if Fullscreen then
-
 		draw.HTMLTexture( ActivePanel(), ScrW(), ScrH() )
 
 		if LastInfoDraw + InfoDrawDelay > CurTime() then
 			DrawVideoInfo( ScrW(), ScrH(), 0.1 )
 		end
-
 	end
-
 end
 hook.Add( "HUDPaint", "DrawFullscreenInfo", DrawFullscreen )

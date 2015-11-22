@@ -1,5 +1,4 @@
 Location.Add( "theater_gcinema", {
-
 	[ "Entrance" ] =
 	{
 		Min = Vector( -1419.0390625, -2438.0549316406, -23.409111022949 ),
@@ -265,7 +264,6 @@ Location.Add( "theater_gcinema", {
 			Height = 100
 		}
 	},
-
 } )
 
 -- Give players who enter the dungeon theater a crowbar

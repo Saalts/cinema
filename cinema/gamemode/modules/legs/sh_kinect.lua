@@ -1,15 +1,16 @@
 local cinema_thirdpersondist = CreateClientConVar("cinema_thirdpersondistance", 100, true)
+
 if SERVER then
 	util.AddNetworkString("cinema_querykinect")
 else //CLIENT
-	concommand.Add("cinema_startkinect", function(ply, cmd, args ) 
-		local available = motionsensor && motionsensor.IsAvailable() 
-		if !available then 
-			print("You don't have an enabled device!") 
+	concommand.Add("cinema_startkinect", function(ply, cmd, args )
+		local available = motionsensor && motionsensor.IsAvailable()
+		if !available then
+			print("You don't have an enabled device!")
 			RunConsoleCommand("act", "muscle")
-			return 
+			return
 		end
-		
+
 		net.Start("cinema_querykinect")
 		net.SendToServer()
 
@@ -25,7 +26,6 @@ else //CLIENT
 			end
 		end
 	end )
-
 end
 
 net.Receive("cinema_querykinect", function(length, ply)
@@ -70,8 +70,7 @@ concommand.Add("cinema_stopkinect", function(ply, cmd, args )
 end )
 
 hook.Add("PlayerDisconnected", "TheaterCleanControllers", function()
-
-	timer.Simple( 3, function() 
+	timer.Simple( 3, function()
 		for k, v in pairs( ents.GetAll() ) do
 			if IsValid( v ) && v.Controlled && !IsValid( v:GetOwner() ) then v:Remove() end
 		end
@@ -79,7 +78,6 @@ hook.Add("PlayerDisconnected", "TheaterCleanControllers", function()
 end )
 
 hook.Add( "InputMouseApply", "TheaterViewRagdoll", function( cmd, x, y, ang )
-
 	local ply = LocalPlayer()
 
 	if IsValid(ply) and ply:GetDTBool( 3) then
@@ -87,7 +85,7 @@ hook.Add( "InputMouseApply", "TheaterViewRagdoll", function( cmd, x, y, ang )
 		local ang = ply.ViewSelfAng or ang
 		local yaw = ( x * -GetConVar( "m_yaw" ):GetFloat() )
 		local pitch = ( y * GetConVar( "m_pitch" ):GetFloat() )
-		
+
 		ang.y = ang.y + yaw
 		ang.p = ang.p + pitch
 
@@ -96,14 +94,12 @@ hook.Add( "InputMouseApply", "TheaterViewRagdoll", function( cmd, x, y, ang )
 		return true
 
 	end
-
 end )
 
 hook.Add("CalcView", "TheaterSpectateRagdoll", function(ply, pos, ang, fov)
-
 	if ply:GetDTBool( 3) && IsValid( ply:GetDTEntity(3) ) then
 		local fwd = ply.ViewSelfAng or ply:EyeAngles()
-		
+
 		local ragdoll = ply:GetDTEntity( 3)
 		local dist = math.Clamp(cinema_thirdpersondist:GetInt(), 10, 1500)
 		local center = ragdoll:GetPos() + Vector( 0, 0, 50 )
@@ -111,14 +107,12 @@ hook.Add("CalcView", "TheaterSpectateRagdoll", function(ply, pos, ang, fov)
 		if trace.Fraction < 1 then
 			dist = dist * trace.Fraction
 		end
-		
+
 		return {
 			["origin"] = center + (fwd:Forward() * -dist * 0.95),
 			["angles"] = Angle(fwd.p + 2, fwd.y, fwd.r)
 		}
-
 	end
-	
 end )
 
 hook.Add("RenderScreenspaceEffects", "TheaterRagdollDisableLegs", function()

@@ -1,9 +1,7 @@
 game.AddParticles( "particles/cinema_fx.pcf" )
 PrecacheParticleSystem( "cn_rain" )
 
-Location.Add( "cinema_theatron",
-{
-
+Location.Add( "cinema_theatron", {
 	[ "Lobby" ] =
 	{
 		Min = Vector( -515.17193603516, -1427.5533447266, -20.195838928223 ),
@@ -82,14 +80,11 @@ Location.Add( "cinema_theatron",
 		Min = Vector( 1244.9357910156, -2546.5344238281, -843.10437011719 ),
 		Max = Vector( 2210.9982910156, -1666.1209716797, -459.64486694336 ),
 	},
-
 } )
 
 if SERVER then
-	
 	local UseCooldown = 0.3 -- seconds
 	hook.Add( "PlayerUse", "PrivateTheaterLightSwitch", function( ply, ent )
-
 		if ply.LastUse and ply.LastUse + UseCooldown > CurTime() then
 			return false
 		end
@@ -100,18 +95,14 @@ if SERVER then
 		-- Only private theater owners can switch the lights
 		local Theater = ply:GetTheater()
 		if Theater and Theater:IsPrivate() and ent:GetClass() == "func_button" then
-
 			ply.LastUse = CurTime()
 
 			if Theater:GetOwner() != ply then
 				Theater:AnnounceToPlayer( ply, 'Theater_OwnerUseOnly' )
 				return false
 			end
-
 		end
 
 		return true
-
 	end )
-
 end

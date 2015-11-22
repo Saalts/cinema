@@ -39,15 +39,11 @@ end
    Desc: Called when the player is waiting to respawn
 -----------------------------------------------------------]]
 function GM:PlayerDeathThink( pl )
-
 	if (  pl.NextSpawnTime && pl.NextSpawnTime > CurTime() ) then return end
 
 	if ( pl:KeyPressed( IN_ATTACK ) || pl:KeyPressed( IN_ATTACK2 ) || pl:KeyPressed( IN_JUMP ) ) then
-	
 		pl:Spawn()
-		
 	end
-	
 end
 
 --[[---------------------------------------------------------
@@ -64,13 +60,11 @@ end
    Desc: Called just before the player's first spawn
 -----------------------------------------------------------]]
 function GM:PlayerInitialSpawn( pl )
-
 	pl:SetTeam( TEAM_UNASSIGNED )
-	
+
 	if ( GAMEMODE.TeamBased ) then
 		pl:ConCommand( "gm_showteam" )
 	end
-
 end
 
 --[[---------------------------------------------------------
@@ -78,16 +72,13 @@ end
    Desc: Called when a player spawns
 -----------------------------------------------------------]]
 function GM:PlayerSpawn( pl )
-
 	--
 	-- If the player doesn't have a team in a TeamBased game
 	-- then spawn him as a spectator
 	--
 	if ( GAMEMODE.TeamBased && ( pl:Team() == TEAM_SPECTATOR || pl:Team() == TEAM_UNASSIGNED ) ) then
-
 		GAMEMODE:PlayerSpawnAsSpectator( pl )
 		return
-	
 	end
 
 	-- Stop observer mode
@@ -99,10 +90,9 @@ function GM:PlayerSpawn( pl )
 
 	-- Call item loadout function
 	hook.Call( "PlayerLoadout", GAMEMODE, pl )
-	
+
 	-- Set player model
 	hook.Call( "PlayerSetModel", GAMEMODE, pl )
-	
 end
 
 --[[---------------------------------------------------------
@@ -110,12 +100,10 @@ end
    Desc: Set the player's model
 -----------------------------------------------------------]]
 function GM:PlayerSetModel( pl )
-
 	local cl_playermodel = pl:GetInfo( "cl_playermodel" )
 	local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
 	util.PrecacheModel( modelname )
 	pl:SetModel( modelname )
-	
 end
 
 --[[---------------------------------------------------------
@@ -123,9 +111,7 @@ end
    Desc: Give the player the default spawning weapons/ammo
 -----------------------------------------------------------]]
 function GM:PlayerLoadout( pl )
-
 	player_manager.RunClass( pl, "Loadout" )
-	
 end
 
 --[[---------------------------------------------------------
@@ -157,9 +143,7 @@ end
 		Return true to prevent player spraying
 -----------------------------------------------------------]]
 function GM:PlayerSpray( ply )
-	
 	return false
-	
 end
 
 --[[---------------------------------------------------------
@@ -167,9 +151,7 @@ end
 		return amount of damage to do due to fall
 -----------------------------------------------------------]]
 function GM:GetFallDamage( ply, flFallSpeed )
-
 	return 0
-	
 end
 
 --[[---------------------------------------------------------
@@ -177,16 +159,14 @@ end
 		Can this player see the other player's chat?
 -----------------------------------------------------------]]
 function GM:PlayerCanSeePlayersChat( strText, bTeamOnly, pListener, pSpeaker )
-	
 	-- Local chat functions as global chat in Cinema
 	if bTeamOnly then
 		return true
 	end
-	
-	-- Players should only receive chat messages from users in the same 
+
+	-- Players should only receive chat messages from users in the same
 	-- theater if it wasn't global.
 	return pSpeaker:GetTheater() == pListener:GetTheater()
-	
 end
 
 local sv_alltalk = GetConVar( "sv_alltalk" )
@@ -194,46 +174,38 @@ local sv_alltalk = GetConVar( "sv_alltalk" )
 --[[---------------------------------------------------------
    Name: gamemode:PlayerCanHearPlayersVoice()
 		Can this player see the other player's voice?
-		Returns 2 bools. 
+		Returns 2 bools.
 		1. Can the player hear the other player
 		2. Can they hear them spacially
 -----------------------------------------------------------]]
 function GM:PlayerCanHearPlayersVoice( pListener, pTalker )
-	
 	local alltalk = sv_alltalk:GetInt()
 	if ( alltalk > 1 ) then return true, alltalk == 2 end
 
 	return pListener:Team() == pTalker:Team(), false
-	
 end
 
 --[[---------------------------------------------------------
    Name: gamemode:PlayerShouldTaunt( ply, actid )
 -----------------------------------------------------------]]
 function GM:PlayerShouldTaunt( ply, actid )
-	
 	-- The default behaviour is to always let them act
 	-- Some gamemodes will obviously want to stop this for certain players by returning false
 	return true
-		
 end
 
 --[[---------------------------------------------------------
    Name: gamemode:PlayerStartTaunt( ply, actid, length )
 -----------------------------------------------------------]]
 function GM:PlayerStartTaunt( ply, actid, length )
-		
 end
-
 
 --[[---------------------------------------------------------
    Name: gamemode:AllowPlayerPickup( ply, object )
 -----------------------------------------------------------]]
 function GM:AllowPlayerPickup( ply, object )
-	
 	-- Should the player be allowed to pick this object up (using ENTER)?
 	-- If no then return false. Default is HELL YEAH
 
 	return true
-		
 end
