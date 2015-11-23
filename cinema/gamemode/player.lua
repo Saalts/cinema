@@ -99,11 +99,14 @@ end
    Name: gamemode:PlayerSetModel( )
    Desc: Set the player's model
 -----------------------------------------------------------]]
-function GM:PlayerSetModel( pl )
-	local cl_playermodel = pl:GetInfo( "cl_playermodel" )
-	local modelname = player_manager.TranslatePlayerModel( cl_playermodel )
-	util.PrecacheModel( modelname )
-	pl:SetModel( modelname )
+function GM:PlayerSetModel( ply )
+	local item = ply:PS2_GetItemInSlot("Model")
+	if item then
+		util.PrecacheModel( item.playerModel )
+		item:ApplyModel()
+	else
+		ply:SetModel("models/player/kleiner.mdl")
+	end
 end
 
 --[[---------------------------------------------------------
