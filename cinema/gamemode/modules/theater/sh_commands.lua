@@ -129,11 +129,13 @@ if CLIENT then
 		end
 	end )
 else
-	local fcvar = { FCVAR_ARCHIVE, FCVAR_DONTRECORD }
+	local fcvar = { FCVAR_ARCHIVE, FCVAR_DONTRECORD, FCVAR_NOTIFY }
 
 	-- Settings
 	CreateConVar( "cinema_video_duration_max", 3 * 60 * 60, fcvar, "Maximum video duration for requests in public theaters." )
 	CreateConVar( "cinema_skip_ratio", 0.66, fcvar, "Ratio between 0-1 determining how many players are required to voteskip a video." )
+	CreateConVar( "cinema_deathmatch", 0, fcvar, "Whether players can kill other players.")
+	CreateConVar( "cinema_deathmatch_admin", 0, fcvar, "Whether admins can kill other players.")
 	-- Permissions
 	CreateConVar( "cinema_allow_url", 0, fcvar, "Allow any url to be set in private theaters." )
 	CreateConVar( "cinema_allow_reset", 0, fcvar, "Reset the theater after all players have left." )

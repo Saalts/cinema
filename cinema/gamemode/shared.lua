@@ -28,6 +28,21 @@ end
 	 Return true if this player should take damage from this attacker
 -----------------------------------------------------------]]
 function GM:PlayerShouldTakeDamage( ply, attacker )
+	if GetConVar("cinema_deathmatch"):GetBool() then return true end
+
+	if GetConVar("cinema_deathmatch_admin"):GetBool() then
+		local ply = nil
+		if IsValid(attacker) and attacker:IsPlayer() then
+			ply = attacker
+		elseif IsValid(attacker:GetOwner()) and attacker:GetOwner():IsPlayer() then
+			ply = attacker:GetOwner()
+		end
+
+		if ply and ply:IsAdmin() then
+			return true
+		end
+	end
+
 	return false
 end
 
@@ -46,6 +61,7 @@ end
 function GM:ShouldCollide( Ent1, Ent2 )
 	return false
 end
+
 
 
 --[[---------------------------------------------------------
