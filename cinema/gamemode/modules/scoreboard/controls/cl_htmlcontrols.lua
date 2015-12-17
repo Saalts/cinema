@@ -1,15 +1,19 @@
---[[__                                       _
+--[[
+  __                                       _
  / _| __ _  ___ ___ _ __  _   _ _ __   ___| |__
 | |_ / _` |/ __/ _ \ '_ \| | | | '_ \ / __| '_ \
 |  _| (_| | (_|  __/ |_) | |_| | | | | (__| | | |
 |_|  \__,_|\___\___| .__/ \__,_|_| |_|\___|_| |_|
-                   |_| 2010 | Updated: 2015 --]]
+                   |_| 2010 | Updated: 2015
+]]--
 
 local PANEL = {}
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: Init
+-----------------------------------------------------------
+]]--
 function PANEL:Init()
 	local ButtonSize = 32
 	local Margins = 2
@@ -94,6 +98,11 @@ function PANEL:Init()
 	self.HomeURL = "http://www.google.com"
 end
 
+--[[
+-----------------------------------------------------------
+	Name: SetHTML
+-----------------------------------------------------------
+]]--
 function PANEL:SetHTML( html )
 	self.HTML = html
 
@@ -128,6 +137,11 @@ function PANEL:SetHTML( html )
 	end
 end
 
+--[[
+-----------------------------------------------------------
+	Name: UpdateHistory
+-----------------------------------------------------------
+]]--
 function PANEL:UpdateHistory( url )
 	--print( "PANEL:UpdateHistory", url )
 	self.Cur = math.Clamp( self.Cur, 1, table.Count( self.History ) )
@@ -159,14 +173,29 @@ function PANEL:UpdateHistory( url )
 	self:UpdateNavButtonStatus()
 end
 
+--[[
+-----------------------------------------------------------
+	Name: FinishedLoading
+-----------------------------------------------------------
+]]--
 function PANEL:FinishedLoading()
 	self.RefreshButton:SetDisabled( false )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: StartedLoading
+-----------------------------------------------------------
+]]--
 function PANEL:StartedLoading()
 	self.RefreshButton:SetDisabled( true )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: UpdateNavButtonStatus
+-----------------------------------------------------------
+]]--
 function PANEL:UpdateNavButtonStatus()
 	--print( self.Cur, table.Count( self.History ) )
 
@@ -175,6 +204,11 @@ function PANEL:UpdateNavButtonStatus()
 
 end
 
+--[[
+-----------------------------------------------------------
+	Name: SetButtonColor
+-----------------------------------------------------------
+]]--
 function PANEL:SetButtonColor( col )
 	self.BackButton:SetColor( col )
 	self.ForwardButton:SetColor( col )
@@ -182,6 +216,11 @@ function PANEL:SetButtonColor( col )
 	self.HomeButton:SetColor( col )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: Paint
+-----------------------------------------------------------
+]]--
 function PANEL:Paint()
 	draw.RoundedBoxEx( self.BorderSize, 0, 0, self:GetWide(), self:GetTall(), self.BackgroundColor, true, true, false, false )
 end

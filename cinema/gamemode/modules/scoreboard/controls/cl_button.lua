@@ -1,4 +1,5 @@
---[[   _
+--[[
+     _
 	( )
    _| |   __   _ __   ___ ___     _ _
  /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
@@ -8,8 +9,7 @@
 	DButton
 
 	Default Button
-
---]]
+]]--
 
 local PANEL = {}
 
@@ -21,18 +21,23 @@ PANEL.DepressedColor = Color( 38 - b, 41 - b, 49 - b )
 PANEL.DisabledColor = Color( 26, 30, 38 )
 PANEL.TextColor = Color( 255, 255, 255 )
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: Init
+-----------------------------------------------------------
+]]--
 function PANEL:Init()
 	self.BaseClass.Init(self)
 
 	self:SetTall( 28 )
 	self:SetFont( "LabelFont" )
-
 end
 
-
+--[[
+-----------------------------------------------------------
+	Name: Paint
+-----------------------------------------------------------
+]]--
 function PANEL:Paint( w, h )
 	if ( !self.m_bBackground ) then return end
 
@@ -58,10 +63,20 @@ function PANEL:Paint( w, h )
 	surface.DrawRect( 0, 0, w, h )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: UpdateColours
+-----------------------------------------------------------
+]]--
 function PANEL:UpdateColours( skin )
     return self:SetTextStyleColor( self.TextColor )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: IsMouseOver
+-----------------------------------------------------------
+]]--
 function PANEL:IsMouseOver()
 	local x,y = self:CursorPos()
 	return x >= 0 and y >= 0 and x <= self:GetWide() and y <= self:GetTall()

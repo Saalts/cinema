@@ -268,7 +268,6 @@ Location.Add( "theater_gcinema", {
 
 -- Give players who enter the dungeon theater a crowbar
 hook.Add( "PlayerChangeLocation", "GivePlayerCrowbar", function( ply, loc, old )
-
 	if !IsValid(ply) then return end
 
 	local Theater = theater.GetByLocation( loc )
@@ -279,5 +278,4 @@ hook.Add( "PlayerChangeLocation", "GivePlayerCrowbar", function( ply, loc, old )
 	elseif bHasCrowbar then
 		ply:StripWeapon( "weapon_crowbar" )
 	end
-
 end )

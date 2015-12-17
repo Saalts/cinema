@@ -15,7 +15,7 @@ end
 	Name: PostVideoLoad
 	Desc: Called after a video has loaded.
 ---------------------------------------------------------------------------
-]]
+]]--
 function GM:PostVideoLoad( Video )
 	local startTime = CurTime() - Video:StartTime()
 

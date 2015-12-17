@@ -1,9 +1,9 @@
 --[[
----------------------------------------------------------
-   Name: gamemode:SetPlayerSpeed( )
-   Desc: Sets the player's run/walk speed
 -----------------------------------------------------------
-]]
+	Name: gamemode:SetPlayerSpeed( )
+	Desc: Sets the player's run/walk speed
+-----------------------------------------------------------
+]]--
 function GM:SetPlayerSpeed( ply, walk, run )
 	ply:SetWalkSpeed( walk )
 	ply:SetRunSpeed( run )
@@ -12,10 +12,10 @@ end
 
 --[[
 ---------------------------------------------------------
-   Name: gamemode:OnPlayerChat()
-		Process the player's chat.. return true for no default
+	Name: gamemode:OnPlayerChat()
+	Desc: Process the player's chat... return true for no default
 -----------------------------------------------------------
-]]
+]]--
 function GM:OnPlayerChat( player, strText, bTeamOnly, bPlayerIsDead )
 	--
 	-- I've made this all look more complicated than it is. Here's the easy version
@@ -49,11 +49,13 @@ function GM:OnPlayerChat( player, strText, bTeamOnly, bPlayerIsDead )
 	return true
 end
 
---[[---------------------------------------------------------
-   Name: gamemode:PlayerNoClip( player, bool )
-   Desc: Player pressed the noclip key, return true if
-		  the player is allowed to noclip, false to block
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:PlayerNoClip( player, bool )
+	Desc: Player pressed the noclip key, return true if
+		the player is allowed to noclip, false to block
+-----------------------------------------------------------
+]]--
 function GM:PlayerNoClip( pl, on )
 	if GetConVar( "sv_cheats" ):GetInt() > 0 then return true end
 
@@ -72,6 +74,11 @@ if !meta then
 	return
 end
 
+--[[
+-----------------------------------------------------------
+	Name: player:GetTranslatedModel(  )
+-----------------------------------------------------------
+]]--
 function meta:GetTranslatedModel()
 	local model = self:GetModel()
 
@@ -91,6 +98,11 @@ function meta:GetTranslatedModel()
 	return model
 end
 
+--[[
+-----------------------------------------------------------
+	Name: player:SetProperties( ent )
+-----------------------------------------------------------
+]]--
 function meta:SetProperties( ent )
 	if !IsValid( ent ) then return end
 

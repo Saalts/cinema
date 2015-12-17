@@ -18,10 +18,12 @@ timer.Create( "TheaterPlayerThink", 1, 0, function()
 	end
 end )
 
---[[---------------------------------------------------------
-   Name: gamemode:DoPlayerDeath( )
-   Desc: Carries out actions when the player dies
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:DoPlayerDeath( )
+	Desc: Carries out actions when the player dies.
+-----------------------------------------------------------
+]]--
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
 	ply:CreateRagdoll()
 
@@ -44,10 +46,12 @@ local function HostnameThink()
 end
 timer.Create( "HostnameThink", 30, 0, HostnameThink )
 
---[[---------------------------------------------------------
-   Name: gamemode:PlayerCanHearPlayersVoice( )
-   Desc: Decides whether the
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:PlayerCanHearPlayersVoice( )
+	Desc: Decides whether the player's voice can be heard.
+-----------------------------------------------------------
+]]--
 function GM:PlayerCanHearPlayersVoice( listener, talker )
 	-- Check for theater module first
 	if !theater then
@@ -74,6 +78,11 @@ function GM:PlayerCanHearPlayersVoice( listener, talker )
 	end
 end
 
+--[[
+-----------------------------------------------------------
+	Name: gamemode:PlayerSwitchFlashlight( ply, enable )
+-----------------------------------------------------------
+]]--
 function GM:PlayerSwitchFlashlight( ply, enable )
 	-- Admins are immune to flashlight restrictions
 	if ply:IsAdmin() then

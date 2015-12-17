@@ -1,4 +1,5 @@
---[[   _
+--[[
+     _
 	( )
    _| |   __   _ __   ___ ___     _ _
  /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
@@ -6,8 +7,7 @@
 `\__,_)`\____)(_)   (_) (_) (_)`\__,_)
 
 	DHTML
-
---]]
+]]--
 
 local RealTime = RealTime
 
@@ -15,12 +15,14 @@ DEFINE_BASECLASS( "Panel" )
 
 local PANEL = {}
 
-local JS_CallbackHack = [[(function(){
+local JS_CallbackHack = [[
+(function(){
 	var funcname = '%s';
 	window[funcname] = function(){
 		_gm[funcname].apply(_gm,arguments);
 	}
-})();]]
+})();
+]]
 
 local ConsoleColors = {
 	["default"] = Color(255,160,255),
@@ -41,7 +43,7 @@ AccessorFunc( PANEL, "m_bScrollbars", 			"Scrollbars", 		FORCE_BOOL )
 AccessorFunc( PANEL, "m_bAllowLua", 			"AllowLua", 		FORCE_BOOL )
 
 --[[---------------------------------------------------------
-
+	Name: Init
 -----------------------------------------------------------]]
 function PANEL:Init()
 	self.History = {}
@@ -92,9 +94,19 @@ function PANEL:Init()
 	end)
 end
 
+--[[
+-----------------------------------------------------------
+	Name: SetupCallbacks
+-----------------------------------------------------------
+]]--
 function PANEL:SetupCallbacks()
 end
 
+--[[
+-----------------------------------------------------------
+	Name: Think
+-----------------------------------------------------------
+]]--
 function PANEL:Think()
 	-- Poll page for URL change
 	if not self._nextUrlPoll or self._nextUrlPoll < RealTime() then
@@ -147,11 +159,21 @@ function PANEL:Think()
 	end
 end
 
+--[[
+-----------------------------------------------------------
+	Name: FetchPageURL
+-----------------------------------------------------------
+]]--
 function PANEL:FetchPageURL()
 	local js = "gmod.getUrl(window.location.href);"
 	self:RunJavascript(js)
 end
 
+--[[
+-----------------------------------------------------------
+	Name: OpenURL
+-----------------------------------------------------------
+]]--
 function PANEL:OpenURL( url, ignoreHistory )
 	if not ignoreHistory then
 		-- Pop URLs from the stack
@@ -167,10 +189,20 @@ function PANEL:OpenURL( url, ignoreHistory )
 	BaseClass.OpenURL( self, url )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: GetURL
+-----------------------------------------------------------
+]]--
 function PANEL:GetURL()
 	return self.URL
 end
 
+--[[
+-----------------------------------------------------------
+	Name: SetURL
+-----------------------------------------------------------
+]]--
 function PANEL:SetURL( url )
 	local current = self.URL
 
@@ -181,25 +213,44 @@ function PANEL:SetURL( url )
 	self.URL = url
 end
 
+--[[
+-----------------------------------------------------------
+	Name: OnURLChanged
+-----------------------------------------------------------
+]]--
 function PANEL:OnURLChanged( new, old )
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
 	Window loading events
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 
---
--- Called when the page begins loading
---
+
+--[[
+-----------------------------------------------------------
+	Name: OnStartLoading
+	Desc: Called when the page begins loading
+-----------------------------------------------------------
+]]--
 function PANEL:OnStartLoading()
 end
 
---
--- Called when the page finishes loading all assets
---
+--[[
+-----------------------------------------------------------
+	Name: OnFinishLoading
+	Desc: Called when the page finishes loading all assets
+-----------------------------------------------------------
+]]--
 function PANEL:OnFinishLoading()
 end
 
+--[[
+-----------------------------------------------------------
+	Name: QueueJavascript
+-----------------------------------------------------------
+]]--
 function PANEL:QueueJavascript( js )
 	--
 	-- Can skip using the queue if there's nothing else in it
@@ -217,6 +268,11 @@ end
 PANEL.QueueJavaScript = PANEL.QueueJavascript
 PANEL.Call = PANEL.QueueJavascript
 
+--[[
+-----------------------------------------------------------
+	Name: ConsoleMessage
+-----------------------------------------------------------
+]]--
 function PANEL:ConsoleMessage( msg, func )
 	if ( !isstring( msg ) ) then msg = "*js variable*" end
 
@@ -255,9 +311,12 @@ local JSObjects = {
 	_gm = "window"
 }
 
---
--- Called by the engine when a callback function is called
---
+--[[
+-----------------------------------------------------------
+	Name: OnCallback
+	Desc: Called by the engine when a callback function is called
+-----------------------------------------------------------
+]]--
 function PANEL:OnCallback( obj, func, args )
 	-- Hack for adding window callbacks
 	obj = JSObjects[obj] or obj
@@ -274,9 +333,13 @@ function PANEL:OnCallback( obj, func, args )
 	end
 end
 
---
--- Add a function to Javascript
---
+
+--[[
+-----------------------------------------------------------
+	Name: AddFunction
+	Desc: Add a function to Javascript
+-----------------------------------------------------------
+]]--
 function PANEL:AddFunction( obj, funcname, func )
 	if obj == "this" then
 		obj = "window"
@@ -301,9 +364,19 @@ function PANEL:AddFunction( obj, funcname, func )
 	self.Callbacks[ obj ][ funcname ] = func;
 end
 
+--[[
+-----------------------------------------------------------
+	Name: OpeningURL
+-----------------------------------------------------------
+]]--
 function PANEL:OpeningURL( url )
 end
 
+--[[
+-----------------------------------------------------------
+	Name: FinishedURL
+-----------------------------------------------------------
+]]--
 function PANEL:FinishedURL( url )
 end
 

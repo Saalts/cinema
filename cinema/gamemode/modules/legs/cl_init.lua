@@ -1,4 +1,5 @@
---[[----------------------------------------------------------------------
+--[[
+----------------------------------------------------------------------
 	2.4 Changelog
 	- Removed arm for melee holdtype, it just did not look good in many cases, mainly because they don't animate while attacking
 	- Made legs move forward as you look up, looks as if you are bending over to look down or something. It's definitly an improvement.
@@ -15,7 +16,8 @@
 
 ----------------------------------------------------------------------
 	Modified for Elevator: Source
-----------------------------------------------------------------------]]
+----------------------------------------------------------------------
+]]--
 
 local Legs = {}
 Legs.LegEnt = nil
@@ -31,7 +33,8 @@ function ShouldDrawLegs()
 			!LocalPlayer().ShouldDisableLegs
 end
 
---[[You can't really get another players legs, so we return the player back.
+--[[
+You can't really get another players legs, so we return the player back.
 This would just simplify render hooks if you wanted to change the appearance
 of a players model and make the legs mimic that change.
 Seeing how you are probably going to be using this for a players model, we return
@@ -47,7 +50,8 @@ hook.Add( "RenderScreenspaceEffects", "RenderWireFrame", function() -- Will rend
 			GetPlayerLegs( ply ):DrawModel() -- If the player is the local player, it returns their legs if visible so we can make our legs have the same effect applied to it all with one simple line
 		SetMaterialOverride( nil )
 	end
-end )]]
+end )
+]]--
 function GetPlayerLegs( ply )
 	return ply and ply != LocalPlayer() and ply or ( ShouldDrawLegs() and Legs.LegEnt or LocalPlayer() )
 end
@@ -75,46 +79,50 @@ Legs.OldWeapon = nil
 Legs.HoldType = nil
 
 -- Can change to whatever you want, I think these two look best
-Legs.BoneHoldTypes = { ["none"] = {
-							"ValveBiped.Bip01_Head1",
-							"ValveBiped.Bip01_Neck1"
-						},
-						["default"] = { -- The default bones to be hidden if there is no hold type bones
-							"ValveBiped.Bip01_Head1",
-							"ValveBiped.Bip01_Neck1"
-						},
-						["vehicle"] = { -- Bones that are deflated while in a vehicle
-							"ValveBiped.Bip01_Head1",
-							"ValveBiped.Bip01_Neck1"
-						},
-						["crouched"] = { -- Bones that are deflated while crouched
-							"ValveBiped.Bip01_L_Hand",
-							"ValveBiped.Bip01_L_Forearm",
-							"ValveBiped.Bip01_L_Upperarm",
-							"ValveBiped.Bip01_L_Clavicle",
-							"ValveBiped.Bip01_R_Hand",
-							"ValveBiped.Bip01_R_Forearm",
-							"ValveBiped.Bip01_R_Upperarm",
-							"ValveBiped.Bip01_R_Clavicle",
-							"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42",
-							"ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32",
-							"ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22",
-							"ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12",
-							"ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02",
-							"ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42",
-							"ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32",
-							"ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22",
-							"ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12",
-							"ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02"
-						}
-					}
+Legs.BoneHoldTypes = {
+	["none"] = {
+		"ValveBiped.Bip01_Head1",
+		"ValveBiped.Bip01_Neck1"
+	},
+	-- The default bones to be hidden if there is no hold type bones
+	["default"] = {
+		"ValveBiped.Bip01_Head1",
+		"ValveBiped.Bip01_Neck1"
+	},
+	-- Bones that are deflated while in a vehicle
+	["vehicle"] = {
+		"ValveBiped.Bip01_Head1",
+		"ValveBiped.Bip01_Neck1"
+	},
+	-- Bones that are deflated while crouched
+	["crouched"] = {
+		"ValveBiped.Bip01_L_Hand",
+		"ValveBiped.Bip01_L_Forearm",
+		"ValveBiped.Bip01_L_Upperarm",
+		"ValveBiped.Bip01_L_Clavicle",
+		"ValveBiped.Bip01_R_Hand",
+		"ValveBiped.Bip01_R_Forearm",
+		"ValveBiped.Bip01_R_Upperarm",
+		"ValveBiped.Bip01_R_Clavicle",
+		"ValveBiped.Bip01_L_Finger4", "ValveBiped.Bip01_L_Finger41", "ValveBiped.Bip01_L_Finger42",
+		"ValveBiped.Bip01_L_Finger3", "ValveBiped.Bip01_L_Finger31", "ValveBiped.Bip01_L_Finger32",
+		"ValveBiped.Bip01_L_Finger2", "ValveBiped.Bip01_L_Finger21", "ValveBiped.Bip01_L_Finger22",
+		"ValveBiped.Bip01_L_Finger1", "ValveBiped.Bip01_L_Finger11", "ValveBiped.Bip01_L_Finger12",
+		"ValveBiped.Bip01_L_Finger0", "ValveBiped.Bip01_L_Finger01", "ValveBiped.Bip01_L_Finger02",
+		"ValveBiped.Bip01_R_Finger4", "ValveBiped.Bip01_R_Finger41", "ValveBiped.Bip01_R_Finger42",
+		"ValveBiped.Bip01_R_Finger3", "ValveBiped.Bip01_R_Finger31", "ValveBiped.Bip01_R_Finger32",
+		"ValveBiped.Bip01_R_Finger2", "ValveBiped.Bip01_R_Finger21", "ValveBiped.Bip01_R_Finger22",
+		"ValveBiped.Bip01_R_Finger1", "ValveBiped.Bip01_R_Finger11", "ValveBiped.Bip01_R_Finger12",
+		"ValveBiped.Bip01_R_Finger0", "ValveBiped.Bip01_R_Finger01", "ValveBiped.Bip01_R_Finger02"
+	}
+}
 
 Legs.BonesToRemove = {}
 Legs.BoneMatrix = nil
 
-function Legs:WeaponChanged( weap ) --Different bones will be visible for different hold types
-	if IsValid( self.LegEnt ) then
-		if IsValid( weap ) then
+function Legs:WeaponChanged(weap) -- Different bones will be visible for different hold types
+	if IsValid(self.LegEnt) then
+		if IsValid(weap) then
 			self.HoldType = weap:GetHoldType()
 		else
 			self.HoldType = "none"
@@ -133,15 +141,15 @@ function Legs:WeaponChanged( weap ) --Different bones will be visible for differ
 		if !LocalPlayer():InVehicle() then
 			Legs.BonesToRemove = Legs.BoneHoldTypes[ Legs.HoldType ] or Legs.BoneHoldTypes[ "default" ]
 
-			if LocalPlayer():KeyDown( IN_DUCK ) then
-				Legs.BonesToRemove = Legs.BoneHoldTypes[ "crouched" ]
+			if LocalPlayer():KeyDown(IN_DUCK) then
+				Legs.BonesToRemove = Legs.BoneHoldTypes["crouched"]
 			end
 
 		else
-			Legs.BonesToRemove = Legs.BoneHoldTypes[ "vehicle" ]
+			Legs.BonesToRemove = Legs.BoneHoldTypes["vehicle"]
 		end
 
-		for _, v in pairs( Legs.BonesToRemove ) do -- Loop through desired bones
+		for _, v in pairs(Legs.BonesToRemove) do -- Loop through desired bones
 			local boneId = self.LegEnt:LookupBone(v)
 			if boneId then
 				self.LegEnt:ManipulateBoneScale(boneId, vector_origin)
@@ -252,9 +260,11 @@ end
 hook.Add( "UpdateAnimation", "Legs:UpdateAnimation", function( ply, velocity, maxseqgroundspeed )
 	if ply == LocalPlayer() then
 		if IsValid( Legs.LegEnt ) then
-			Legs:Think( maxseqgroundspeed ) -- Called every frame. Pass the ground speed for later use
+			-- Called every frame. Pass the ground speed for later use
+			Legs:Think( maxseqgroundspeed )
 		else
-			Legs:SetUp() -- No legs, create them. Should only be called once
+			-- No legs, create them. Should only be called once
+			Legs:SetUp()
 		end
 	end
 end )
@@ -268,16 +278,19 @@ Legs.RenderColor = {}
 Legs.ClipVector = vector_up * -1
 Legs.ForwardOffset = -24
 
-function Legs:CheckDrawVehicle() -- Will return true if the player is in a vehicle and NOT in third person, or the player is not in a vehicle
+-- Will return true if the player is in a vehicle and NOT in third person, or the player is not in a vehicle
+function Legs:CheckDrawVehicle()
 	return LocalPlayer():InVehicle()
 end
 
-hook.Add( "RenderScreenspaceEffects", "Legs:Render", function() -- Need to find a better place to render. Legs half-way in water = looks like they are clipped
-	cam.Start3D( EyePos(), EyeAngles() )
-		if ShouldDrawLegs() then -- Render check
-
+ -- Need to find a better place to render. Legs half-way in water = looks like they are clipped
+hook.Add( "RenderScreenspaceEffects", "Legs:Render", function()
+	cam.Start3D(EyePos(), EyeAngles())
+		-- Render check
+		if ShouldDrawLegs() then
 			Legs.RenderPos = LocalPlayer():GetPos()
-			if LocalPlayer():InVehicle() then -- The player is in a vehicle, so we use the vehicles angles, not the LocalPlayer
+			-- The player is in a vehicle, so we use the vehicles angles, not the LocalPlayer
+			if LocalPlayer():InVehicle() then
 				Legs.RenderAngle = LocalPlayer():GetVehicle():GetAngles()
 				Legs.RenderAngle:RotateAroundAxis( Legs.RenderAngle:Up(), 90 ) -- Fix it
 			else -- This calculates the offset behind the player, adjust the -22 if you want to move it

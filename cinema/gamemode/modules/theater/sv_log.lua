@@ -7,7 +7,8 @@ function Query( command )
 		Msg("Creating 'cinema_history' table...\n")
 
 		-- Initialize the database table
-		sql.Query([[CREATE TABLE cinema_history (
+		sql.Query([[
+		CREATE TABLE cinema_history (
 			id INTEGER PRIMARY KEY,
 			type VARCHAR(32),
 			title VARCHAR(32),
@@ -16,7 +17,8 @@ function Query( command )
 			thumbnail VARCHAR(256),
 			count NUMERIC NOT NULL DEFAULT 0,
 			lastRequest NUMERIC NOT NULL DEFAULT 0
-		)]])
+		)
+		]])
 	end
 
 	if command then
@@ -25,17 +27,13 @@ function Query( command )
 end
 
 function GetVideoLog( data, type )
-	local str = "SELECT * FROM cinema_history WHERE " ..
-		string.format("type='%s' AND ", type) ..
-		string.format("data='%s'", data)
+	local str = "SELECT * FROM cinema_history WHERE " .. string.format("type='%s' AND ", type) .. string.format("data='%s'", data)
 
 	return Query(str)
 end
 
 function RemoveVideoLog( data, type )
-	local str = "DELETE FROM cinema_history WHERE " ..
-		string.format("type='%s' AND ", type) ..
-		string.format("data='%s'", data)
+	local str = "DELETE FROM cinema_history WHERE " .. string.format("type='%s' AND ", type) .. string.format("data='%s'", data)
 
 	return Query(str)
 end
@@ -53,9 +51,7 @@ function LogVideo( Video, Theater )
 	local duration = Video:Duration()
 	local thumbnail = sql.SQLStr(Video:Thumbnail())
 
-	local str = "SELECT count FROM cinema_history WHERE " ..
-		string.format("type='%s' AND ", Type) ..
-		string.format("data=%s", data)
+	local str = "SELECT count FROM cinema_history WHERE " .. string.format("type='%s' AND ", Type) .. string.format("data=%s", data)
 
 	local results = Query(str)
 

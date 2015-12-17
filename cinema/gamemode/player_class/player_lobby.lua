@@ -26,18 +26,24 @@ PLAYER.DropWeaponOnDie		= false		-- Do we drop our weapon when we die
 PLAYER.TeammateNoCollide 	= true		-- Do we collide with teammates or run straight through them
 PLAYER.AvoidPlayers			= false		-- Automatically swerves around other players
 
---
--- Set up the network table accessors
---
+--[[
+---------------------------------------------------------------------------
+	Name: SetupDataTables
+	Desc: Set up the network table accessors
+---------------------------------------------------------------------------
+]]--
 function PLAYER:SetupDataTables()
 	BaseClass.SetupDataTables( self )
 	self.Player:NetworkVar( "Int", 0, "Location" )
 	self.Player:NetworkVar( "Bool", 0, "InTheater" )
 end
 
---
--- Called serverside only when the player spawns
---
+--[[
+---------------------------------------------------------------------------
+	Name: Spawn
+	Desc: Called serverside only when the player spawns
+---------------------------------------------------------------------------
+]]--
 function PLAYER:Spawn()
 	BaseClass.Spawn( self )
 
@@ -48,35 +54,46 @@ function PLAYER:Spawn()
 	self.Player:ClearPoseParameters()
 end
 
---
--- Called on spawn to give the player their default loadout
---
+
+--[[
+---------------------------------------------------------------------------
+	Name: Loadout
+	Desc: Called on spawn to give the player their default loadout
+---------------------------------------------------------------------------
+]]--
 function PLAYER:Loadout()
 	self.Player:RemoveAllAmmo()
 	self.Player:SwitchToDefaultWeapon()
 end
 
---
--- Return true to draw local (thirdperson) camera - false to prevent - nothing to use default behaviour
---
+--[[
+---------------------------------------------------------------------------
+	Name: ShouldDrawLocal
+	Desc: Return true to draw local (thirdperson) camera - false to prevent - nothing to use default behaviour
+---------------------------------------------------------------------------
+]]--
 function PLAYER:ShouldDrawLocal()
 	if ( self.TauntCam:ShouldDrawLocalPlayer( self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
 end
 
---
--- Allow player class to create move
---
+--[[
+---------------------------------------------------------------------------
+	Name: CreateMove
+	Desc: Allow player class to create move
+---------------------------------------------------------------------------
+]]--
 function PLAYER:CreateMove( cmd )
 	if ( self.TauntCam:CreateMove( cmd, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
 end
 
---
--- Allow changing the player's view
---
+--[[
+---------------------------------------------------------------------------
+	Name: CalcView
+	Desc: Allow changing the player's view
+---------------------------------------------------------------------------
+]]--
 function PLAYER:CalcView( view )
 	if ( self.TauntCam:CalcView( view, self.Player, self.Player:IsPlayingTaunt() ) ) then return true end
-
-	-- Your stuff here
 end
 
 player_manager.RegisterClass( "player_lobby", PLAYER, "player_default" )

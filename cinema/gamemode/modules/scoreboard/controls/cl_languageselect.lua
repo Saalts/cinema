@@ -1,4 +1,5 @@
---[[   _
+--[[
+     _
     ( )
    _| |   __   _ __   ___ ___     _ _
  /'_` | /'__`\( '__)/' _ ` _ `\ /'_` )
@@ -6,8 +7,7 @@
 `\__,_)`\____)(_)   (_) (_) (_)`\__,_)
 
 	DComboBox
-
---]]
+]]--
 
 PANEL = {}
 
@@ -15,9 +15,11 @@ Derma_Hook( PANEL, "Paint", "Paint", "ComboBox" )
 
 Derma_Install_Convar_Functions( PANEL )
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: Init
+-----------------------------------------------------------
+]]--
 function PANEL:Init()
 	self.DropButton = vgui.Create( "DPanel", self )
 	self.DropButton.Paint = function( panel, w, h ) derma.SkinHook( "Paint", "ComboDownArrow", panel, w, h ) end
@@ -32,9 +34,11 @@ function PANEL:Init()
 	self:SetIsMenu( true )
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: Clear
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:Clear()
 	self:SetText( "" )
 	self.Choices = {}
@@ -46,25 +50,31 @@ function PANEL:Clear()
 	end
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: GetOptionText
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:GetOptionText( id )
 	return self.Choices[ id ]
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: PerformLayout
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:PerformLayout()
 	self.DropButton:SetSize( 15, 15 )
 	self.DropButton:AlignRight( 4 )
 	self.DropButton:CenterVertical()
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: ChooseOption
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:ChooseOption( value, index )
 	if ( self.Menu ) then
 		self.Menu:Remove()
@@ -75,9 +85,11 @@ function PANEL:ChooseOption( value, index )
 	self:OnSelect( index, value, self.Data[index] )
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: ChooseOptionID
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:ChooseOptionID( index )
 	if ( self.Menu ) then
 		self.Menu:Remove()
@@ -90,9 +102,11 @@ function PANEL:ChooseOptionID( index )
 	self:OnSelect( index, value, self.Data[index] )
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: OnSelect
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:OnSelect( index, value, data )
 	RunConsoleCommand( "gmod_language", data )
 
@@ -115,9 +129,11 @@ function PANEL:OnSelect( index, value, data )
 	end
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: AddChoice
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:AddLanguage( lang, select )
 	local i = table.insert( self.Choices, lang )
 
@@ -132,16 +148,20 @@ function PANEL:AddLanguage( lang, select )
 	return i
 end
 
---[[---------------------------------------------------------
-
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: IsMenuOpen
+-----------------------------------------------------------
+]]--
 function PANEL:IsMenuOpen()
 	return IsValid( self.Menu ) && self.Menu:IsVisible()
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: OpenMenu
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:OpenMenu( pControlOpener )
 	if ( pControlOpener ) then
 		if ( pControlOpener == self.TextEntry ) then
@@ -184,20 +204,40 @@ function PANEL:OpenMenu( pControlOpener )
 	self.Menu:Open( x, y, false, self )
 end
 
+--[[
+-----------------------------------------------------------
+   Name: CloseMenu
+-----------------------------------------------------------
+]]--
 function PANEL:CloseMenu()
 	if ( IsValid( self.Menu ) ) then
 		self.Menu:Remove()
 	end
 end
 
+--[[
+-----------------------------------------------------------
+   Name: Think
+-----------------------------------------------------------
+]]--
 function PANEL:Think()
 	self:ConVarNumberThink()
 end
 
+--[[
+-----------------------------------------------------------
+   Name: SetValue
+-----------------------------------------------------------
+]]--
 function PANEL:SetValue( strValue )
 	self:SetText( strValue )
 end
 
+--[[
+-----------------------------------------------------------
+   Name: DoClick
+-----------------------------------------------------------
+]]--
 function PANEL:DoClick()
 	if ( self:IsMenuOpen() ) then
 		return self:CloseMenu()
@@ -206,9 +246,11 @@ function PANEL:DoClick()
 	self:OpenMenu()
 end
 
---[[---------------------------------------------------------
+--[[
+-----------------------------------------------------------
    Name: GenerateExample
------------------------------------------------------------]]
+-----------------------------------------------------------
+]]--
 function PANEL:GenerateExample( ClassName, PropertySheet, Width, Height )
 	local ctrl = vgui.Create( ClassName )
 	ctrl:AddChoice( "Some Choice" )

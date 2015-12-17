@@ -6,7 +6,7 @@ include( 'shared.lua' )
 
 --[[
 	Unsupported Notifications
-]]
+]]--
 hook.Add( "InitPostEntity", "CheckMapSupport", function()
 	if Location then
 		hook.Run( "CinemaRegisterMap", Location )
@@ -42,7 +42,7 @@ end )
 
 --[[
 	HUD Elements to hide
-]]
+]]--
 GM.HUDToHide = {
 	"CHudHealth",
 	"CHudSuitPower",
@@ -53,10 +53,12 @@ GM.HUDToHide = {
 	"CHudZoom"
 }
 
---[[---------------------------------------------------------
-   Name: gamemode:HUDShouldDraw( name )
-   Desc: return true if we should draw the named element
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:HUDShouldDraw( name )
+	Desc: return true if we should draw the named element
+-----------------------------------------------------------
+]]--
 function GM:HUDShouldDraw( name )
 	-- Allow the weapon to override this
 	local ply = LocalPlayer()
@@ -72,28 +74,34 @@ function GM:HUDShouldDraw( name )
 	return !table.HasValue(self.HUDToHide, name)
 end
 
---[[---------------------------------------------------------
-   Name: gamemode:HUDPaint( )
-   Desc: Use this section to paint your HUD
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:HUDPaint( )
+	Desc: Use this section to paint your HUD
+-----------------------------------------------------------
+]]--
 function GM:HUDPaint()
 	hook.Run( "HUDDrawTargetID" )
 	-- hook.Run( "HUDDrawPickupHistory" )
 	hook.Run( "DrawDeathNotice", 0.85, 0.04 )
 end
 
---[[---------------------------------------------------------
-   Name: gamemode:HUDPaint( )
-   Desc: Use this section to paint your HUD
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:HUDPaint( )
+	Desc: Use this section to paint your HUD
+-----------------------------------------------------------
+]]--
 function GM:HUDDrawTargetID()
 	return false
 end
 
---[[---------------------------------------------------------
-   Name: CalcView
-   Allows override of the default view
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: CalcView
+	Desc: Allows override of the default view
+-----------------------------------------------------------
+]]--
 function GM:CalcView( ply, origin, angles, fov, znear, zfar )
 	local Vehicle	= ply:GetVehicle()
 	local Weapon	= ply:GetActiveWeapon()
@@ -138,20 +146,26 @@ function GM:CalcView( ply, origin, angles, fov, znear, zfar )
 	return view
 end
 
+--[[
+-----------------------------------------------------------
+	Name: ShouldDrawLocalPlayer
+	Desc: If return true: 		Will draw the local player
+		If return false: 	Won't draw the local player
+		If return nil:	 	Will carry out default action
 --
--- If return true: 		Will draw the local player
--- If return false: 	Won't draw the local player
--- If return nil:	 	Will carry out default action
---
+-----------------------------------------------------------
+]]--
 function GM:ShouldDrawLocalPlayer( ply )
 	return player_manager.RunClass( ply, "ShouldDrawLocal" )
 end
 
---[[---------------------------------------------------------
-   Name: gamemode:CreateMove( command )
-   Desc: Allows the client to change the move commands
-			before it's send to the server
------------------------------------------------------------]]
+--[[
+-----------------------------------------------------------
+	Name: gamemode:CreateMove( command )
+	Desc: Allows the client to change the move commands
+		before it's send to the server
+-----------------------------------------------------------
+]]--
 function GM:CreateMove( cmd )
 	if ( player_manager.RunClass( LocalPlayer(), "CreateMove", cmd ) ) then return true end
 end
